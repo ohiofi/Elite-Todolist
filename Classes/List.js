@@ -19,6 +19,23 @@ class List{
     //Adds Task object to storage in List object.
     addTask(task){
         this.listStorage.push(task);
+        // set the position of the task
+        task.setPosition(this.listStorage.length - 1);
+
+        // create callback functions so that the task can remotely control this list
+
+        // give the task a moveDown callback function which calls the list's moveDown method
+        task.moveDown = () => {
+            const currentIndex = this.listStorage.indexOf(task);
+            this.moveDown(currentIndex); // tell the list to move the task
+        };
+
+        // give the task a moveUp callback function which calls the list's moveUp method
+        task.moveUp = () => {
+            const currentIndex = this.listStorage.indexOf(task);
+            this.moveUp(currentIndex); // tell the list to move the task
+        };
+
     }
 
     removeTask(task){
@@ -32,9 +49,21 @@ class List{
         //todo
     }
 
+    // this will swap the tasks at index and index + 1
+    moveDown(index){
+        // do a safety check to avoid index out of range
+        // TODO
+    }
+
     moveTask(list, task){
         list.addTask(task);
         this.removeTask(task);
+    }
+
+    // this will swap the tasks at index and index - 1
+    moveUp(index){
+        // do a safety check to avoid index out of range
+        // TODO
     }
 
     toString(){
