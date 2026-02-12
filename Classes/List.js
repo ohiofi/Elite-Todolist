@@ -59,7 +59,7 @@ class List{
     // this will swap the tasks at index and index + 1
     moveDown(index){
         // do a safety check to avoid index out of range
-        if(index >= listStorage.length - 1){
+        if(index >= this.listStorage.length - 1){
             return;
         }
         this.swapIndex(index, index + 1);
