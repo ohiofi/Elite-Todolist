@@ -55,7 +55,15 @@ class Task {
 
     //methods
     toString() {
-        return `Name: ${this.name}\n Description: ${this.description}\n Status: ${this.status}\n Position: ${this.position}\n Is Finished: ${this.finished}`;
+        let output = ""
+
+        output += `Name: ${this.name}\n`
+        output += `Description: ${this.description}\n`
+        output += `Status: ${this.status}\n`
+        output += `Position: ${this.position}\n`
+        output += `Is Finished: ${this.finished}`
+
+        return output;
     }
 
     show(x, y) {
