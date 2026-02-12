@@ -5,6 +5,14 @@ class List{
     constructor(name){
         this.name = name || DEFAULT_LIST_NAME
         this.listStorage = [];
+
+        this.addTaskButton = createButton(`Add Task`);
+        this.addTaskButton.hide();
+        this.addTaskButton.mousePressed(() => this.buttonPressedAddTask());
+
+        this.deleteListButton = createButton(`Delete List`);
+        this.deleteListButton.hide();
+        this.deleteListButton.mousePressed(() => this.buttonPressedDeleteList());
     }
 
     //Getters
@@ -47,6 +55,8 @@ class List{
 
         //move to archive
         //todo
+
+       
     }
 
     //swap the first index with the second index
@@ -91,11 +101,18 @@ class List{
     
     buttonPressedAddTask(){
         this.addTask(new Task())
-        refresh()
+        refresh();
+    }
+
+    deleteTaskButtons(){
+        for (let each of this.listStorage) {
+            each.deleteTaskButtons();
+        }
     }
 
     buttonPressedDeleteList(){
         this.deleteListButtons()
+        this.deleteTaskButtons()
         listArray.splice(listArray.indexOf(this), listArray.indexOf(this)>= 0 ? 1 : 0);
         refresh()
     }
@@ -151,21 +168,13 @@ class List{
         // box
         rect(x, 10, 400, 1000, 15);
 
-        // green box which represents uh some button perhaps
-        // fill(0, 150, 0);
-        // rect(x + 10, 20, 20, 20)
-        // fill(255);
-        this.addTaskButton = createButton(`Add Task`);
+        //sets pos of buttons
         this.addTaskButton.position(x + 10, 20);
-        this.addTaskButton.mousePressed(() => this.buttonPressedAddTask());
-
-        // red box for delete button maybe?
-        // fill(150, 0, 0);
-        // rect(x + 370, 20, 20, 20)
-        // fill(255);
-        this.deleteListButton = createButton(`Delete List`);
         this.deleteListButton.position(x + 310, 20);
-        this.deleteListButton.mousePressed(() => this.buttonPressedDeleteList());
+
+        //shows buttons
+        this.addTaskButton.show();
+        this.deleteListButton.show();
 
         // title
         textAlign(CENTER, CENTER);
@@ -174,29 +183,20 @@ class List{
         fill(255);
 
         // show all tasks in this list
-        if(localStorage.getItem("listsInit") == "no"){
-            this.initTask();
-        }else{
-            this.refreshTask()
+        if(this.listStorage.length > 0){
+            console.log("show")
+            this.showTask()
         }
         
+        
+    
     }
 
-    initTask(){
+    showTask(){
         let y = 70;
         for (let each of this.listStorage) {
             each.show(x + 10, y);
             y += 130;
-        }
-        //localStorage.setItem("listsInit", "yes");
-    }
-
-    refreshTask(){
-        let y = 70;
-        for (let each of this.listStorage) {
-            each.deleteTaskButtons();
-            each.show(x + 10, y);
-            y += 130
         }
     }
 

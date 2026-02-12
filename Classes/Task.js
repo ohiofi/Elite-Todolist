@@ -18,6 +18,15 @@ class Task {
         this.status =      status   || DEFAULT_STATUS;
         this.position =    position || DEFAULT_POSITION;
         this.finished =                DEFAULT_FINISHED;
+
+        this.markTaskDoneButton = createButton(`Mark Done`);
+        this.markTaskDoneButton.hide();
+        this.markTaskDoneButton.mousePressed(() => this.buttonPressedMarkDone());
+        
+        this.deleteTaskButton = createButton(`Delete Task`);
+        this.deleteTaskButton.hide();
+        this.deleteTaskButton.mousePressed(() => this.buttonPressedDelete());
+
     }
 
     //getters and setters
@@ -64,27 +73,40 @@ class Task {
         this.deleteTaskButton.remove();
     }
 
+    buttonPressedMarkDone(){
+        this.setCompleted();
+        refresh();
+    }
+
+    buttonPressedDelete(){
+        let list = this.getListTask()
+        this.deleteTaskButtons()
+        list.removeTask(this);
+        refresh();
+    }
+
+    //gets the list that the task is in
+    getListTask(){
+        for(let list of listArray){
+            let storage = list.getStorage();
+            if(storage.findIndex(t => t.name === this.name) != -1){
+                return list
+            }
+        }
+    }
+
     show(x, y) {
 
         // main box
         rect(x, y, 380, 120, 10);
 
-        // green box which represents mark as done button maybe?
-        // fill(0, 150, 0);
-        // rect(x + 10, y + 10, 20, 20)
-        // fill(255);
-        this.markTaskDoneButton = createButton(`Mark Done`);
+        // sets pos of buttons        
         this.markTaskDoneButton.position(x + 10, y+10);
-        //this.markTaskDoneButton.mousePressed(() => /*put mark task function here*/ console.log("needs function"));
-
-        // red box for delete button maybe?
-        // fill(150, 0, 0);
-        // rect(x + 350, y + 10, 20, 20)
-        // fill(255);
-
-        this.deleteTaskButton = createButton(`Delete Task`);
         this.deleteTaskButton.position(x + 285, y+10);
-        //this.deleteTaskButton.mousePressed(() => );
+
+        //shows buttons
+        this.markTaskDoneButton.show();
+        this.deleteTaskButton.show();
 
         // text slop
         textAlign(CENTER, CENTER);
