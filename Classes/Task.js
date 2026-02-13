@@ -105,14 +105,16 @@ class Task {
 
     buttonPressedMarkDone(){
         this.setCompleted();
-        refresh();
+        let list = this.getListTask();
+        list.moveTask(listArray[0], this);
+        //refresh();
     }
 
     buttonPressedDelete(){
         let list = this.getListTask()
         this.deleteTaskButtons()
         list.removeTask(this);
-        refresh();
+        //refresh();
     }
 
     //gets the list that the task is in
@@ -143,7 +145,8 @@ class Task {
         fill(0);
         text(this.name, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING);
         text(this.description, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING * 2);
-        fill(255, 0, 0);
+        if (this.status === "Todo") fill(255, 0, 0);
+        if (this.status === "Done") fill(0, 255, 0);
         text(this.status, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING * 3);
         fill(255);
     }
