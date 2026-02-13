@@ -6,6 +6,8 @@ let x = 10;
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
+  listArray.push(new ArchiveList());
+
   let list1 = new List("Groceries");
   list1.addTask(new Task("Apples", "Get 2 Honeycrisp apples"));
   list1.addTask(new Task("Bananas", "3 or 4 green bananas"));
@@ -50,5 +52,3 @@ function draw() {
 //       x += 410
 //     }
 //   }
-
-// }
