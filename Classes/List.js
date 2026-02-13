@@ -185,14 +185,14 @@ class List{
         // show all tasks in this list
         if(this.listStorage.length > 0){
             //console.log("show")
-            this.showTask()
+            this.showTask(x)
         }
         
         
     
     }
 
-    showTask(){
+    showTask(x){
         let y = 70;
         for (let each of this.listStorage) {
             each.show(x + 10, y);
