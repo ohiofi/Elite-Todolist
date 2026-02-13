@@ -101,7 +101,6 @@ class List{
     
     buttonPressedAddTask(){
         this.addTask(new Task())
-        //refresh();
     }
 
     deleteTaskButtons(){
@@ -110,11 +109,11 @@ class List{
         }
     }
 
+    // ❌ SHOULD be handleDeleteListPress and should request that ListManager object handle it
     buttonPressedDeleteList(){
         this.deleteListButtons()
         this.deleteTaskButtons()
         listArray.splice(listArray.indexOf(this), listArray.indexOf(this)>= 0 ? 1 : 0);
-        //refresh()
     }
 
     toString(){
@@ -164,6 +163,7 @@ class List{
         }
     }
 
+    // ❌ should not have x arg
     show(x) {
         // box
         rect(x, 10, 400, 1000, 15);
