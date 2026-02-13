@@ -1,17 +1,17 @@
 
-let listManager;
+let listPlanbook;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  listManager = new Manager();
+  listPlanbook = new Planbook();
 }
 
 
 function draw() {
   background(220);
-  listManager.update();
-  listManager.show();
+  listPlanbook.update();
+  listPlanbook.show();
 }
 
 

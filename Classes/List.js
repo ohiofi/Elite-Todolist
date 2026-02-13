@@ -109,7 +109,7 @@ class List{
         }
     }
 
-    // ❌ SHOULD be handleDeleteListPress and should request that ListManager object handle it
+    // ❌ SHOULD be handleDeleteListPress and should request that ListPlanbook object handle it
     buttonPressedDeleteList(){
         this.deleteListButtons()
         this.deleteTaskButtons()
