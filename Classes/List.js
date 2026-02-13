@@ -12,17 +12,27 @@ class List{
 
         this.deleteListButton = createButton(`Delete List`);
         this.deleteListButton.hide();
-        this.deleteListButton.mousePressed(() => this.buttonPressedDeleteList());
+        this.deleteListButton.mousePressed(() => this.handleDeleteListPress());
+
+        this.x = 0;
+        this.y = 10;
+        this.yLocationForNextTask = 70;
     }
 
-    //Getters
     getStorage(){
         return this.listStorage;
     }
-
     getName(){
         return this.name;
     }
+
+    setX(newLocation) {
+        this.x = newLocation || 0;
+        for(let each of this.listStorage){
+            each.setX(newLocation + 10);
+        }
+    }
+    setY(newLocation) { this.y = newLocation || 0}
 
     //Adds Task object to storage in List object.
     addTask(task){
@@ -30,44 +40,68 @@ class List{
         // set the position of the task
         task.setPosition(this.listStorage.length - 1);
 
+        task.setX(this.x + 10)
+        task.setY(this.yLocationForNextTask);
+        this.yLocationForNextTask += 140;
+        this.bindCallbackFunctions(task);
+    }
+
+
+    bindCallbackFunctions(taskObject){
         // create callback functions so that the task can remotely control this list
 
-        // give the task a moveDown callback function which calls the list's moveDown method
-        task.moveDown = () => {
-            const currentIndex = this.listStorage.indexOf(task);
-            this.moveDown(currentIndex); // tell the list to move the task
+        // give the task a handleMoveDownPress callback function which calls the list's moveTaskDown method
+        taskObject.handleMoveDownPress = () => {
+            const currentIndex = this.listStorage.indexOf(taskObject);
+            this.moveTaskDown(currentIndex); // tell the list to move the task
         };
 
-        // give the task a moveUp callback function which calls the list's moveUp method
-        task.moveUp = () => {
-            const currentIndex = this.listStorage.indexOf(task);
-            this.moveUp(currentIndex); // tell the list to move the task
+        // give the task a handleMoveUpPress callback function which calls the list's moveTaskUp method
+        taskObject.handleMoveUpPress = () => {
+            const currentIndex = this.listStorage.indexOf(taskObject);
+            this.moveTaskUp(currentIndex); // tell the list to move the task
+        };
+
+        taskObject.handleMarkDonePress = () => {
+            this.handleMoveTaskToArchive(taskObject);
+            console.log("mark done");
+        };
+
+        taskObject.handleDeletePress = () => {
+            this.removeTask(taskObject)
         };
 
     }
 
-    removeTask(task){
-        let storage = this.getStorage();
-        const indx = storage.findIndex(t => t.name === task.name);
+    handleMoveTaskToArchive(taskObject){};
 
-        //remove task
-        this.listStorage.splice(indx, indx >= 0 ? 1 : 0);
+    removeTask(taskObject){
+        let index = this.listStorage.indexOf(taskObject);
+        this.listStorage.splice(index, 1);
+        taskObject.deleteTaskButtons();
+        // move the rest of the tasks up
+        for(let i = index; i < this.listStorage.length; i++){
+            this.listStorage[i].setY(this.listStorage[i].y - 140);
+        }
 
-        //move to archive
-        //todo
+        this.yLocationForNextTask -= 140;
 
        
     }
 
     //swap the first index with the second index
     swapIndex(firstIndex, secondIndex){
-        let temp = this.listStorage[firstIndex]
-        this.listStorage[firstIndex] = this.listStorage[secondIndex]
+        let temp = this.listStorage[firstIndex];
+        this.listStorage[firstIndex] = this.listStorage[secondIndex]        
         this.listStorage[secondIndex] = temp;
+
+        let tempY = this.listStorage[firstIndex].y;
+        this.listStorage[firstIndex].y = this.listStorage[secondIndex].y;
+        this.listStorage[secondIndex].y = tempY;
     }
 
     // this will swap the tasks at index and index + 1
-    moveDown(index){
+    moveTaskDown(index){
         // do a safety check to avoid index out of range
         if(index >= this.listStorage.length - 1){
             return;
@@ -78,7 +112,7 @@ class List{
     }
 
         // this will swap the tasks at index and index - 1
-    moveUp(index){
+    moveTaskUp(index){
         if(index <= 0){
             return;
         }
@@ -97,6 +131,7 @@ class List{
     deleteListButtons(){
         this.addTaskButton.remove()
         this.deleteListButton.remove();
+        this.deleteTaskButtons();
     }
     
     buttonPressedAddTask(){
@@ -110,11 +145,13 @@ class List{
     }
 
     // ❌ SHOULD be handleDeleteListPress and should request that ListPlanbook object handle it
-    buttonPressedDeleteList(){
-        this.deleteListButtons()
-        this.deleteTaskButtons()
-        listArray.splice(listArray.indexOf(this), listArray.indexOf(this)>= 0 ? 1 : 0);
-    }
+    // buttonPressedDeleteList(){
+    //     this.deleteListButtons()
+    //     this.deleteTaskButtons()
+    //     listArray.splice(listArray.indexOf(this), listArray.indexOf(this)>= 0 ? 1 : 0);
+    // }
+
+    handleDeleteListPress(){}
 
     toString(){
         let output = `List: ${this.name}\n`;
@@ -164,13 +201,13 @@ class List{
     }
 
     // ❌ should not have x arg
-    show(x) {
+    show() {
         // box
-        rect(x, 10, 400, 1000, 15);
+        rect(this.x, this.y, 400, 1000, 15);
 
         //sets pos of buttons
-        this.addTaskButton.position(x + 10, 20);
-        this.deleteListButton.position(x + 310, 20);
+        this.addTaskButton.position(this.x + 10, 20);
+        this.deleteListButton.position(this.x + 310, 20);
 
         //shows buttons
         this.addTaskButton.show();
@@ -179,23 +216,23 @@ class List{
         // title
         textAlign(CENTER, CENTER);
         fill(0);
-        text(this.name, x + 200, 30);
+        text(this.name, this.x + 200, 30);
         fill(255);
 
         // show all tasks in this list
         if(this.listStorage.length > 0){
             //console.log("show")
-            this.showTask(x)
+            this.showTask()
         }
         
         
     
     }
 
-    showTask(x){
+    showTask(){
         let y = 70;
         for (let each of this.listStorage) {
-            each.show(x + 10, y);
+            each.show(this.x + 10, y);
             y += 130;
         }
     }

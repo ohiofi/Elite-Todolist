@@ -36,12 +36,14 @@ class Task {
 
         this.markTaskDoneButton = createButton(`Mark Done`);
         this.markTaskDoneButton.hide();
-        this.markTaskDoneButton.mousePressed(() => this.buttonPressedMarkDone());
+        this.markTaskDoneButton.mousePressed(() => this.handleMarkDonePress());
         
         this.deleteTaskButton = createButton(`Delete Task`);
         this.deleteTaskButton.hide();
-        this.deleteTaskButton.mousePressed(() => this.buttonPressedDelete());
+        this.deleteTaskButton.mousePressed(() => this.handleDeletePress());
 
+        this.x = 0;
+        this.y = 0;
     }
 
     //getters and setters
@@ -56,6 +58,8 @@ class Task {
     setStatus(newStatus)   { this.status      = newStatus || DEFAULT_STATUS }
     setPosition(newPos)    { this.position    = newPos    || DEFAULT_POSITION }
     setFinished(condition) { this.finished    = condition || DEFAULT_FINISHED }
+    setX(newLocation) { this.x = newLocation || 0}
+    setY(newLocation) { this.y = newLocation || 0}
 
     //im not saying that this method should be in the list but it should definitely be in the list
     setArchived() {
@@ -70,11 +74,11 @@ class Task {
 
     // ❌ SHOULD BE handleDeletePress and then use a callback function to notify the list
     //get the list class to remove this or something
-    delete() {
-        this.setName("Deleted Task")
-        this.setDesc("")
-        this.setStatus(TASK_STATES.DELETED)
-    }
+    // delete() {
+    //     this.setName("Deleted Task")
+    //     this.setDesc("")
+    //     this.setStatus(TASK_STATES.DELETED)
+    // }
 
     //basically slides the position of the task up or down 1 spot (world record for fastest annihilation of the webapp)
     slidePosition(direction) {
@@ -105,41 +109,47 @@ class Task {
     }
 
     // ❌ SHOULD BE handleMarkDonePress and then use a callback function to notify the list
-    buttonPressedMarkDone(){
-        this.setCompleted();
-        let list = this.getListTask();
-        list.moveTask(listArray[0], this);
-        //refresh();
-    }
+    // buttonPressedMarkDone(){
+    //     this.setCompleted();
+    //     let list = this.getListTask();
+    //     list.moveTask(listArray[0], this);
+    //     //refresh();
+    // }
+    handleMarkDonePress(){}
+
+    handleMoveDownPress(){}
+
+    handleMoveUpPress(){}
 
     // ❌ duplicate method SHOULD BE handleDeletePress and then use a callback function to notify the list
-    buttonPressedDelete(){
-        let list = this.getListTask()
-        this.deleteTaskButtons()
-        list.removeTask(this);
-        //refresh();
-    }
+    // buttonPressedDelete(){
+    //     let list = this.getListTask()
+    //     this.deleteTaskButtons()
+    //     list.removeTask(this);
+    //     //refresh();
+    // }
+    handleDeletePress(){}
 
     // ❌ this should NOT be the responsibility of a Task object
     //gets the list that the task is in
-    getListTask(){
-        for(let list of listArray){
-            let storage = list.getStorage();
-            if(storage.findIndex(t => t.name === this.name) != -1){
-                return list
-            }
-        }
-    }
+    // getListTask(){
+    //     for(let list of listArray){
+    //         let storage = list.getStorage();
+    //         if(storage.findIndex(t => t.name === this.name) != -1){
+    //             return list
+    //         }
+    //     }
+    // }
 
     // ❌ should NOT have x, y args
-    show(x, y) {
+    show() {
 
         // main box
-        rect(x, y, 380, 120, 10);
+        rect(this.x, this.y, 380, 120, 10);
 
         // sets pos of buttons        
-        this.markTaskDoneButton.position(x + 10, y+10);
-        this.deleteTaskButton.position(x + 285, y+10);
+        this.markTaskDoneButton.position(this.x + 10, this.y+10);
+        this.deleteTaskButton.position(this.x + 285, this.y+10);
 
         //shows buttons
         this.markTaskDoneButton.show();
@@ -148,11 +158,11 @@ class Task {
         // text slop
         textAlign(CENTER, CENTER);
         fill(0);
-        text(this.name, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING);
-        text(this.description, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING * 2);
+        text(this.name, this.x + TEXT_X_OFFSET, this.y + TEXT_Y_PADDING);
+        text(this.description, this.x + TEXT_X_OFFSET, this.y + TEXT_Y_PADDING * 2);
         if (this.status === "Todo") fill(255, 0, 0);
         if (this.status === "Done") fill(0, 255, 0);
-        text(this.status, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING * 3);
+        text(this.status, this.x + TEXT_X_OFFSET, this.y + TEXT_Y_PADDING * 3);
         fill(255);
     }
 
