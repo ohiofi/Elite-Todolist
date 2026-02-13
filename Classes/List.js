@@ -101,7 +101,7 @@ class List{
     
     buttonPressedAddTask(){
         this.addTask(new Task())
-        refresh();
+        //refresh();
     }
 
     deleteTaskButtons(){
@@ -114,7 +114,7 @@ class List{
         this.deleteListButtons()
         this.deleteTaskButtons()
         listArray.splice(listArray.indexOf(this), listArray.indexOf(this)>= 0 ? 1 : 0);
-        refresh()
+        //refresh()
     }
 
     toString(){
