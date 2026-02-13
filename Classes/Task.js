@@ -68,6 +68,7 @@ class Task {
         this.setFinished(true);
     }
 
+    // ❌ SHOULD BE handleDeletePress and then use a callback function to notify the list
     //get the list class to remove this or something
     delete() {
         this.setName("Deleted Task")
@@ -103,6 +104,7 @@ class Task {
         this.deleteTaskButton.remove();
     }
 
+    // ❌ SHOULD BE handleMarkDonePress and then use a callback function to notify the list
     buttonPressedMarkDone(){
         this.setCompleted();
         let list = this.getListTask();
@@ -110,6 +112,7 @@ class Task {
         //refresh();
     }
 
+    // ❌ duplicate method SHOULD BE handleDeletePress and then use a callback function to notify the list
     buttonPressedDelete(){
         let list = this.getListTask()
         this.deleteTaskButtons()
@@ -117,6 +120,7 @@ class Task {
         //refresh();
     }
 
+    // ❌ this should NOT be the responsibility of a Task object
     //gets the list that the task is in
     getListTask(){
         for(let list of listArray){
@@ -127,6 +131,7 @@ class Task {
         }
     }
 
+    // ❌ should NOT have x, y args
     show(x, y) {
 
         // main box
