@@ -42,6 +42,8 @@ class Task {
         this.deleteTaskButton.hide();
         this.deleteTaskButton.mousePressed(() => this.buttonPressedDelete());
 
+        this.id = Math.floor(Date.now() / ((Math.random() * 10000) + 500))
+
     }
 
     //getters and setters
@@ -119,7 +121,7 @@ class Task {
     getListTask(){
         for(let list of listArray){
             let storage = list.getStorage();
-            if(storage.findIndex(t => t.name === this.name) != -1){
+            if(storage.findIndex(t => t.id === this.id) != -1){
                 return list
             }
         }

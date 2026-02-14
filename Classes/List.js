@@ -48,7 +48,7 @@ class List{
 
     removeTask(task){
         let storage = this.getStorage();
-        const indx = storage.findIndex(t => t.name === task.name);
+        const indx = storage.findIndex(t => t.id === task.id);
 
         //remove task
         this.listStorage.splice(indx, indx >= 0 ? 1 : 0);
