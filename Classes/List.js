@@ -139,7 +139,6 @@ class List{
 
 
 
-
     //will need worked on a bit when we get multiple lists
     pushToLocalStorage(listID){
         //uploads the obj it to local storage under the key name of what ever is stored in listID
@@ -148,35 +147,35 @@ class List{
         //does the same thing but without the buttons
         const data = {
             name: this.name,
-            listStorage: this.listStorage
+            listStorage: this.listStorage.map(task => task.toJSON())
         };
+
         localStorage.setItem(listID, JSON.stringify(data));
     }
     
 
+    getFromLocalStorage(listId){
+        //gets data from local storage
+        const data = localStorage.getItem(listId);
+        if(data === null) return;
 
-getFromLocalStorage(listId){
-    //gets data from local storage
-    const data = localStorage.getItem(listId);
-    if(data === null) return;
+        //converts it to be useable agige
+        const parsedData = JSON.parse(data);
 
-    //converts it to be useable agige
-    const parsedData = JSON.parse(data);
+        //resets the name
+        this.name = parsedData.name;
 
-    //resets the name
-    this.name = parsedData.name;
+        //clears the data
+        this.listStorage = []; 
 
-    //clears the data
-    this.listStorage = []; 
-
-    //needed to add the tasks to the list stoage and i forgot to do that... mb
-    if (parsedData.listStorage) {
-        for (let item of parsedData.listStorage) {
-            let task = Task.fromJSON(item);
-            this.addTask(task); 
+        //needed to add the tasks to the list stoage and i forgot to do that... mb
+        if (parsedData.listStorage) {
+            for (let item of parsedData.listStorage) {
+                let task = Task.fromJSON(item);
+                this.addTask(task); 
+            }
         }
     }
-}
 
     show(x) {
         // box
