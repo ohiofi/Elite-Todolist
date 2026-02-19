@@ -104,10 +104,20 @@ class Task {
         this.deleteTaskButton.remove();
     }
 
-    buttonPressedMarkDone(){
+     buttonPressedMarkDone(){
         this.setCompleted();
         let list = this.getListTask();
-        list.moveTask(listArray[0], this);
+        for (let i = 0; i < listArray.length; i++) {
+            if (listArray[i].getName() === "Archive") {
+                list.moveTask(listArray[i], this);
+                break;
+            }
+            if (i === listArray.length - 1) {
+                listArray.push(new ArchiveList);
+                list.moveTask(listArray[i + 1], this);
+                break;
+            }
+        }
         console.log(this.id + " was marked as done");
         //refresh();
     }
