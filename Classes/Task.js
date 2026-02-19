@@ -39,22 +39,22 @@ const STATUS_COLORS       = {
 }
 
 //confirm button settings (offsets so far)
-const CONFIRM_X_OFFSET    = 10
-const CONFIRM_Y_OFFSET    = 10
+const CONFIRM_X_OFFSET    = 10;
+const CONFIRM_Y_OFFSET    = 10;
 
 //cancel button settings (offsets so far)
-const CANCEL_X_OFFSET     = 350
-const CANCEL_Y_OFFSET     = 10
+const CANCEL_X_OFFSET     = 350;
+const CANCEL_Y_OFFSET     = 10;
 
 //menu offset
 const MENU_X_OFFSET = 373
 const MENU_Y_OFFSET = 9
 
 //text settings
-const TEXT_X_OFFSET       = 190
-const TEXT_X_PADDING      = 0   //not used yet
-const TEXT_Y_OFFSET       = 0   //not used yet
-const TEXT_Y_PADDING      = 30
+const TEXT_X_OFFSET       = 190;
+const TEXT_X_PADDING      = 0;   //not used yet
+const TEXT_Y_OFFSET       = 0;   //not used yet
+const TEXT_Y_PADDING      = 30;
 
 //id settings
 const ID_MIN              = 1
@@ -123,9 +123,9 @@ class Task {
 
     //get the list class to remove this or something
     delete() {
-        this.setName("Deleted Task")
-        this.setDesc("")
-        this.setStatus(TASK_STATES.DELETED)
+        this.setName("Deleted Task");
+        this.setDesc("");
+        this.setStatus(TASK_STATES.DELETED);
     }
 
     //slides task down(-1), or up(1).
@@ -223,13 +223,27 @@ class Task {
 
     buttonPressedMarkDone(){
         this.setCompleted();
+        let list = this.getListTask();
+        for (let i = 0; i < listArray.length; i++) {
+            if (listArray[i].getName() === "Archive") {
+                list.moveTask(listArray[i], this);
+                break;
+            }
+            if (i === listArray.length - 1) {
+                listArray.push(new ArchiveList);
+                list.moveTask(listArray[i + 1], this);
+                break;
+            }
+        }
+        console.log(this.id + " was marked as done");
+        //refresh();
         refresh();
         saveAllLists();
     }
 
     buttonPressedDelete(){
-        let list = this.getListTask()
-        this.deleteTaskButtons()
+        let list = this.getListTask();
+        this.deleteTaskButtons();
         list.removeTask(this);
         refresh();
         saveAllLists();
@@ -240,7 +254,7 @@ class Task {
         for(let list of listArray){
             let storage = list.getStorage();
             if(storage.findIndex(t => t.id === this.id) != -1){
-                return list
+                return list;
             }
         }
     }

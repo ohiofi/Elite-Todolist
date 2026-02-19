@@ -3,7 +3,7 @@ const DEFAULT_LIST_NAME = "New List";
 class List{
 
     constructor(name){
-        this.name = name || DEFAULT_LIST_NAME
+        this.name = name || DEFAULT_LIST_NAME;
         this.listStorage = [];
 
         this.addTaskButton = createButton(`Add Task`);
@@ -24,13 +24,6 @@ class List{
         return this.name;
     }
 
-
-    getNewTask(){
-        let name =  prompt("Input the task name.");
-        let desc = prompt("Input the tasks description.");
-        return new Task(name, desc);
-    }
-
     //Adds Task object to storage in List object.
     addTask(task){
         this.listStorage.push(task);
@@ -49,7 +42,7 @@ class List{
         //move to archive
         //todo
 
-       
+        // ^ i dont really think we should, this works fine
     }
 
     //swap the first index with the second index
@@ -85,7 +78,6 @@ class List{
         this.removeTask(task);
     }
 
-    
 
     deleteListButtons(){
         this.addTaskButton.remove()
@@ -129,22 +121,12 @@ class List{
         return output;
     }
 
-
-
     //will need worked on a bit when we get multiple lists
     pushToLocalStorage(listID){
         //uploads the obj it to local storage under the key name of what ever is stored in listID
-        //const stringObj = JSON.stringify(this) <-- this stopped working when we added the buttons
-
-        //does the same thing but without the buttons
-        const data = {
-            name: this.name,
-            listStorage: this.listStorage.map(task => task.toJSON())
-        };
-
-        localStorage.setItem(listID, JSON.stringify(data));
+        const stringObj = JSON.stringify(this)
+        localStorage.setItem(listID, stringObj);
     }
-    
 
     getFromLocalStorage(listId){
         //gets data from local storage
@@ -183,17 +165,17 @@ class List{
 
         // title
         textAlign(CENTER, CENTER);
+        textSize(24);
         fill(0);
-        text(this.name, x + 200, 30);
+        text(this.name, x + 200, 35);
         fill(255);
+        textSize(12);
 
         // show all tasks in this list
         if(this.listStorage.length > 0){
             //console.log("show")
             this.showTask()
         }
-        
-        
     
     }
 
