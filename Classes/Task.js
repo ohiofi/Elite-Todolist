@@ -77,6 +77,10 @@ class Task {
         this.deleteTaskButton.hide();
         this.deleteTaskButton.mousePressed(() => this.buttonPressedDelete());
 
+        this.editTaskButton = createButton(`Edit Task`);
+        this.editTaskButton.hide();
+        this.editTaskButton.mousePressed(() => this.editTask());
+
         this.moveTaskUpButton = createButton(`⬆️`);
         this.moveTaskUpButton.hide();
         this.moveTaskUpButton.mousePressed(() => this.slidePosition(1));
@@ -156,6 +160,11 @@ class Task {
 
         return output;
     }
+
+    editTask(){
+        this.name = prompt("Input the task name.");
+        this.description = prompt("Input the tasks description.");
+    }
     
     showTaskMenu(){
 
@@ -174,16 +183,19 @@ class Task {
 
         // sets pos of buttons        
         this.markTaskDoneButton.position(pos.x + MENU_X_OFFSET + 7, pos.y + MENU_Y_OFFSET + 7);
-        this.deleteTaskButton.position(pos.x + MENU_X_OFFSET + 7, pos.y + MENU_Y_OFFSET + 30);
+        this.editTaskButton.position(pos.x + MENU_X_OFFSET + 7, pos.y + MENU_Y_OFFSET + 30);
+        this.deleteTaskButton.position(pos.x + MENU_X_OFFSET + 7, pos.y + MENU_Y_OFFSET + 53);
 
         //show move task up/down buttons
         this.markTaskDoneButton.show();
+        this.editTaskButton.show();
         this.deleteTaskButton.show();
     }
 
     hideMenuButtons(){
         this.markTaskDoneButton.hide();
         this.deleteTaskButton.hide();
+        this.editTaskButton.hide();
     }
 
     deleteTaskButtons(){
@@ -191,6 +203,7 @@ class Task {
         this.moveTaskDownButton.remove();
         this.markTaskDoneButton.remove();
         this.deleteTaskButton.remove();
+        this.editTaskButton.remove();
         this.menuButton.remove();
 
         saveAllLists();
