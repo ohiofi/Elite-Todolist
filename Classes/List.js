@@ -6,7 +6,7 @@ const LIST_BACKGROUND_COLOR = new Color(255);
 class List{
 
     constructor(name){
-        this.name = name || DEFAULT_LIST_NAME
+        this.name = name || DEFAULT_LIST_NAME;
         this.listStorage = [];
 
         this.addTaskButton = createButton(`Add Task`);
@@ -27,26 +27,17 @@ class List{
         return this.name;
     }
 
-
-    getNewTask(){
-        let name =  prompt("Input the task name.");
-        let desc = prompt("Input the tasks description.");
-        return new Task(name, desc);
-    }
-
     //Adds Task object to storage in List object.
     addTask(task){
         this.listStorage.push(task);
         // set the position of the task
         task.setPosition(this.listStorage.length - 1);
 
-        
-
     }
 
     removeTask(task){
         let storage = this.getStorage();
-        const indx = storage.findIndex(t => t.id === task.id);
+        const indx = storage.findIndex(t => t.Id === task.Id);
 
         //remove task
         this.listStorage.splice(indx, indx >= 0 ? 1 : 0);
@@ -54,7 +45,13 @@ class List{
         //move to archive
         //todo
 
-       
+        // ^ i dont really think we should, this works fine
+    }
+
+    getNewTask(){
+        let name =  prompt("Input the task name.");
+        let desc = prompt("Input the tasks description.");
+        return new Task(name, desc);
     }
 
     //swap the first index with the second index
@@ -97,7 +94,7 @@ class List{
     }
     
     buttonPressedAddTask(){
-        this.addTask(this.getNewTask())
+        this.addTask(getNewTask())
         //this.addTask(new Task())
         refresh();
         saveAllLists();
@@ -132,22 +129,13 @@ class List{
         return output;
     }
 
-
-
     //will need worked on a bit when we get multiple lists
     pushToLocalStorage(listID){
+        console.log("pushToLocalStorage is currently broken and has been disabled")
         //uploads the obj it to local storage under the key name of what ever is stored in listID
-        //const stringObj = JSON.stringify(this) <-- this stopped working when we added the buttons
-
-        //does the same thing but without the buttons
-        const data = {
-            name: this.name,
-            listStorage: this.listStorage.map(task => task.toJSON())
-        };
-
-        localStorage.setItem(listID, JSON.stringify(data));
+        //const stringObj = JSON.stringify(this)
+        //localStorage.setItem(listID, stringObj);
     }
-    
 
     getFromLocalStorage(listId){
         //gets data from local storage
@@ -175,22 +163,37 @@ class List{
     }
 
     show(x) {
+        stroke(0);
+        fill(255);
         // box
-        rect(x, 10, 400, 1000, 15);
+        let verticalOffsetTop = 100;
+        let verticalOffsetBottom = 125;
+
+        
+        rect(x, verticalOffsetTop, 400, windowHeight - verticalOffsetBottom, 15);
 
         //sets pos of buttons
-        this.addTaskButton.position(x + 10, 20);
-        this.deleteListButton.position(x + 310, 20);
+        this.addTaskButton.position(x + 10, verticalOffsetTop + 10);
+        this.deleteListButton.position(x + 290, verticalOffsetTop + 10);
+
+        styleButton(this.addTaskButton);
+        styleButton(this.deleteListButton); 
+
 
         //shows buttons
         this.addTaskButton.show();
         this.deleteListButton.show();
 
         // title
+        strokeWeight(0);
+        textFont(TEXT_FONT)
         textAlign(CENTER, CENTER);
+        textSize(24);
         fill(LIST_TITLE_COLOR.getColor());
-        text(this.name, x + 200, 30);
+        text(this.name, x + 200, verticalOffsetTop + 20);
         fill(LIST_BACKGROUND_COLOR.getColor());
+        textSize(12);
+        strokeWeight(1);
 
         // show all tasks in this list
         if(this.listStorage.length > 0){
@@ -200,11 +203,25 @@ class List{
     }
 
     showTasks(x){
-        let y = 70;
+        let y = 70 + verticalOffsetTop;
         for (let index = 0; index < this.listStorage.length; index++) { 
             let task = this.listStorage[index]
             task.show(x + 10, y + (130 * index));
         }
     }
+
+
+//     showTask(y){
+//         let taskSpacing = 150;// has to be < 130
+//         for (let each of this.listStorage) {
+//             each.show(x + 10, y);
+//             y += taskSpacing;
+//         }
+//         y = 70;
+//         for (let each of this.listStorage) {
+//             each.showTaskMenu()
+//             y += 130;
+//         }
+//     }
 
 }
