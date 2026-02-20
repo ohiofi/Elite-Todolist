@@ -92,7 +92,7 @@ class List{
     }
     
     buttonPressedAddTask(){
-        this.addTask(this.getNewTask())
+        this.addTask(getNewTask())
         //this.addTask(new Task())
         refresh();
         saveAllLists();
