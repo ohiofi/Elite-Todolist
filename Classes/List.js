@@ -129,9 +129,10 @@ class List{
 
     //will need worked on a bit when we get multiple lists
     pushToLocalStorage(listID){
+        console.log("pushToLocalStorage is currently broken and has been disabled")
         //uploads the obj it to local storage under the key name of what ever is stored in listID
-        const stringObj = JSON.stringify(this)
-        localStorage.setItem(listID, stringObj);
+        //const stringObj = JSON.stringify(this)
+        //localStorage.setItem(listID, stringObj);
     }
 
     getFromLocalStorage(listId){
