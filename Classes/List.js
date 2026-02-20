@@ -1,4 +1,7 @@
-const DEFAULT_LIST_NAME = "New List";
+const DEFAULT_LIST_NAME     = "New List";
+
+const LIST_TITLE_COLOR      = new Color();
+const LIST_BACKGROUND_COLOR = new Color(255);
 
 class List{
 
@@ -71,7 +74,7 @@ class List{
 
         // this will swap the tasks at index and index - 1
     moveUp(index){
-        if(index <= 0){
+        if(index <= 0 || index >= this.listStorage.length){
             return;
         }
         this.swapIndex(index, index - 1);
@@ -83,7 +86,6 @@ class List{
         list.addTask(task);
         this.removeTask(task);
     }
-
 
     deleteListButtons(){
         this.addTaskButton.remove()
@@ -138,7 +140,9 @@ class List{
     getFromLocalStorage(listId){
         //gets data from local storage
         const data = localStorage.getItem(listId);
-        if(data === null) return;
+        if (!data) { //should work the same as checking if null (if not change it back to "data === null")
+            return;
+        }
 
         //converts it to be useable agige
         const parsedData = JSON.parse(data);
@@ -185,31 +189,40 @@ class List{
         textFont(TEXT_FONT)
         textAlign(CENTER, CENTER);
         textSize(24);
-        fill(0);
+        fill(LIST_TITLE_COLOR.getColor());
         text(this.name, x + 200, verticalOffsetTop + 20);
-        fill(255);
+        fill(LIST_BACKGROUND_COLOR.getColor());
         textSize(12);
         strokeWeight(1);
 
         // show all tasks in this list
         if(this.listStorage.length > 0){
             //console.log("show")
-            this.showTask(70 + verticalOffsetTop)
+            this.showTasks(x)
         }
-    
     }
 
-    showTask(y){
-        let taskSpacing = 150;// has to be < 130
-        for (let each of this.listStorage) {
-            each.show(x + 10, y);
-            y += taskSpacing;
-        }
-        y = 70;
-        for (let each of this.listStorage) {
-            each.showTaskMenu()
-            y += 130;
+    showTasks(x){
+        let verticalOffsetTop = 100;
+        let y = 70 + verticalOffsetTop;
+        for (let index = 0; index < this.listStorage.length; index++) { 
+            let task = this.listStorage[index]
+            task.show(x + 10, y + (130 * index));
         }
     }
+
+
+//     showTask(y){
+//         let taskSpacing = 150;// has to be < 130
+//         for (let each of this.listStorage) {
+//             each.show(x + 10, y);
+//             y += taskSpacing;
+//         }
+//         y = 70;
+//         for (let each of this.listStorage) {
+//             each.showTaskMenu()
+//             y += 130;
+//         }
+//     }
 
 }
