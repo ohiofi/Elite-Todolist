@@ -267,7 +267,7 @@ class Task {
         this.y = y;
 
         // main box
-        strokeWeight(5)
+        strokeWeight(3)
         stroke(STROKE_COLOR.getColor())
         push();
         fill(this.bgColor)
@@ -284,7 +284,7 @@ class Task {
         this.moveTaskDownButton.show();
         this.menuButton.show();
 
-        strokeWeight(0)
+        strokeWeight(0);
         // text slop
         textFont(TEXT_FONT)
         //name
@@ -304,6 +304,7 @@ class Task {
         text(this.status, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING * 3);
 
         fill(WHY_IS_THIS_HERE.getColor()); //im confused on why were filling with white here lol (might be p5js jank)
+        strokeWeight(1);
 
         
     }

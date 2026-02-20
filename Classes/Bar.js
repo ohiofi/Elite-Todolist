@@ -20,6 +20,7 @@ class Bar{
 
 
     show(){
+        stroke(0);
         fill(this.color);
         rect(this.x, this.y, this.width, this.height, this.cornerCouverture);
 
