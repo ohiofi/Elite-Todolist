@@ -4,7 +4,6 @@ const LIST_TITLE_COLOR      = new Color();
 const LIST_BACKGROUND_COLOR = new Color(255);
 
 class List{
-
     constructor(name){
         this.name = name || DEFAULT_LIST_NAME;
         this.listStorage = [];
@@ -101,8 +100,8 @@ class List{
     }
 
     deleteTaskButtons(){
-        for (let each of this.listStorage) {
-            each.deleteTaskButtons();
+        for (let task of this.getStorage()) {
+            task.deleteTaskButtons();
         }
         saveAllLists();
     }
@@ -121,7 +120,7 @@ class List{
 
         for(let i = 0; i < this.listStorage.length; i++){
             output += this.listStorage[i].toString();
-            if(i < this.listStorage.length - 1){
+            if(i <= this.listStorage.length){
                 output += "\n";
             }
         }
@@ -129,38 +128,80 @@ class List{
         return output;
     }
 
+    toSaveString() {
+        let saveString = ""
+
+        let listName = this.getName()
+        console.log(`List being saved: ${listName}`)
+        saveString += listName + "&" //will always be 0 on split (hypothetically)
+
+        for (let task of this.getStorage()) {
+            console.log(`Task being saved: ${task.getName()}`)
+            saveString += task.toSaveString() + "&"
+        }
+
+        return saveString
+    }
+
     //will need worked on a bit when we get multiple lists
     pushToLocalStorage(listID){
-        console.log("pushToLocalStorage is currently broken and has been disabled")
+        // console.log("pushToLocalStorage is currently broken and has been disabled")
+        console.warn("Attempting to save the list...")
         //uploads the obj it to local storage under the key name of what ever is stored in listID
-        //const stringObj = JSON.stringify(this)
-        //localStorage.setItem(listID, stringObj);
+        //const stringObj = JSON.stringify(this.toSaveString())
+        let stringObj = this.toSaveString()
+        localStorage.setItem(listID, stringObj);
+
+        console.log("List saved successfully (maybe)!")
     }
 
-    getFromLocalStorage(listId){
-        //gets data from local storage
-        const data = localStorage.getItem(listId);
-        if (!data) { //should work the same as checking if null (if not change it back to "data === null")
-            return;
+    loadFromLocalStorage(listId) {
+        let saveString = localStorage.getItem(listId)
+        if (!saveString) {
+            return
         }
 
-        //converts it to be useable agige
-        const parsedData = JSON.parse(data);
+        let brokenString = saveString.split("&")
 
-        //resets the name
-        this.name = parsedData.name;
+        this.name = brokenString[0]
+        this.listStorage = []
 
-        //clears the data
-        this.listStorage = []; 
+        if (!brokenString[1]) { //early return if there arent any more values
+            return
+        }
+        for (let taskNum = 1; taskNum < brokenString.length; taskNum++) {
+            let taskSave = brokenString[taskNum]
+            let newTask = convertTaskFromSaveString(taskSave)
 
-        //needed to add the tasks to the list stoage and i forgot to do that... mb
-        if (parsedData.listStorage) {
-            for (let item of parsedData.listStorage) {
-                let task = Task.fromJSON(item);
-                this.addTask(task); 
-            }
+            this.listStorage.push(newTask) //hope this supports the whole id thing
         }
     }
+
+    //sure hope im not doing anything dumb
+    // loadFromLocalStorage(listId){
+    //     //gets data from local storage
+    //     const data = localStorage.getItem(listId);
+    //     if (!data) { //should work the same as checking if null (if not change it back to "data === null")
+    //         return;
+    //     }
+
+    //     //converts it to be useable agige
+    //     const parsedData = JSON.parse(data);
+
+    //     //resets the name
+    //     this.name = parsedData.name;
+
+    //     //clears the data
+    //     this.listStorage = []; 
+
+    //     //needed to add the tasks to the list stoage and i forgot to do that... mb
+    //     if (parsedData.listStorage) {
+    //         for (let item of parsedData.listStorage) {
+    //             let task = Task.fromJSON(item);
+    //             this.addTask(task); 
+    //         }
+    //     }
+    // }
 
     show(x) {
         stroke(0);
@@ -225,4 +266,18 @@ class List{
 //         }
 //     }
 
+}
+
+function convertTaskFromSaveString(saveString) { //generational amount of characters
+    let brokenString = saveString.split("|") //Name, Desc, Status, Position, Id in that order
+
+    let savedName     = brokenString[0]
+    let savedDesc     = brokenString[1]
+    let savedStatus   = brokenString[2]
+    let savedPosition = parseInt(brokenString[3])
+    let savedId       = parseInt(brokenString[4])
+    
+    //might be an easier way to do this
+    let newTask = new Task(savedName, savedDesc, savedStatus, savedPosition, savedId) 
+    return newTask
 }

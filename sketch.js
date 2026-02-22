@@ -5,16 +5,15 @@ let menuBar;
 // sorry i couldnt think of a better solution for spacing them out
 // well actually i probably could but minimum viable product yknow
 
-//TODO: implement the new convertTaskFromSaveString() function into this... somewhere
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  menuBar = new Bar(10, 10, windowWidth -20, 75, 15, 200)
+  menuBar = new Bar(10, 10, windowWidth - 20, 75, 15, 200)
 
   let i = 0;
-  while (localStorage.getItem(i.toString()) !== null) {
+  while (localStorage.getItem(i.toString())/* !== null (uncomment if this doesnt work)*/) {
     let list = new List();
-    list.getFromLocalStorage(i.toString());
+    list.loadFromLocalStorage(i.toString());
     listArray.push(list);
     i++;
   }
@@ -35,14 +34,11 @@ function setup() {
   //initList();
 }
 
-
 function draw() {
   background(220);
   showTasks();
   menuBar.show();
 }
-
-
 
 // function initList(){
 //   background(220);
@@ -75,34 +71,20 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
 
-//may need to be moved to another script, idk where ppl save their stuff
-function convertTaskFromSaveString(saveString) { //generational amount of characters
-    let brokenString = saveString.split("|") //Name, Desc, Status, Position, Id in that order
-    
-    //might be an easier way to do this
-    let newTask = new Task(brokenString[0], brokenString[1], brokenString[2], brokenString[3].parseInt(), brokenString[4].parseInt()) 
-    return newTask
-}
-
-
-
-
 function saveAllLists(){
   for(let i = 0; i < listArray.length; i++){
     listArray[i].pushToLocalStorage(i.toString());
   }
 }
 
-
-
 function getNewTask(){
-  let name =  prompt("Input the task name.");
-  let desc = prompt("Input the tasks description.");
+  let name =  prompt("Input the task name:");
+  let desc = prompt("Input the task's description:");
   return new Task(name, desc);
 }
 
 function getNewList(){
-    let name =  prompt("Input the list name.");
+    let name =  prompt("Input the list name:");
     return new List(name);
 }
 
