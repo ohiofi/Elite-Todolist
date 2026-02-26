@@ -241,8 +241,13 @@ class List {
     // }
 
     show(x) {
-        stroke(0);
-        fill(255);
+        if (theme === "default") {
+            stroke(0);
+            fill(255);
+        } else if (theme === "dark") {
+            stroke(255);
+            fill(0);
+        }
         // box
         let verticalOffsetTop = 100;
         let verticalOffsetBottom = 125;
@@ -263,13 +268,17 @@ class List {
         this.deleteListButton.show();
 
         // title
-        strokeWeight(0);
         textFont(TEXT_FONT);
         textAlign(CENTER, CENTER);
+        if (theme === "default") {
+            strokeWeight(0);
+        } else if (theme === "dark") {
+            strokeWeight(3);
+        }
         textSize(24);
         fill(LIST_TITLE_COLOR.getColor());
         text(this.name, x + 200, verticalOffsetTop + 20);
-        fill(LIST_BACKGROUND_COLOR.getColor());
+        // fill(LIST_BACKGROUND_COLOR.getColor());
         textSize(12);
         strokeWeight(1);
 

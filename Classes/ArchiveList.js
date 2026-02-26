@@ -6,8 +6,13 @@ class ArchiveList extends List {
 
 
     show(x) {
-        stroke(0);
-        fill(255);
+        if (theme === "default") {
+            stroke(0);
+            fill(255);
+        } else if (theme === "dark") {
+            stroke(255);
+            fill(0);
+        }
         // box
         let verticalOffsetTop = 100;
         let verticalOffsetBottom = 125;
@@ -26,11 +31,16 @@ class ArchiveList extends List {
         this.addTaskButton.remove();
 
         // title
-        strokeWeight(0);
+        
         textFont(TEXT_FONT);
         textAlign(CENTER, CENTER);
-        textSize(24);
+        if (theme === "default") {
+            strokeWeight(0);
+        } else if (theme === "dark") {
+            strokeWeight(3);      
+        }
         fill(0);
+        textSize(24);
         text(this.name, x + 200, verticalOffsetTop + 20);
         fill(255);
         textSize(12);

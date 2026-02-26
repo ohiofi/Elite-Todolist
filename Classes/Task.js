@@ -160,10 +160,14 @@ class Task {
         this.menu.y = this.y;
 
         // main box
-        strokeWeight(3)
+        strokeWeight(3);
         stroke(STROKE_COLOR.getColor());
         push();
-        fill(this.bgColor.getColor());
+        if (theme === "default") {
+            fill(this.bgColor.getColor());
+        } else if (theme === "dark") {
+            fill(this.bgColor.toDarkMode().getColor());
+        }
         rect(x, y, 380, 120, 10);
         pop();
 
