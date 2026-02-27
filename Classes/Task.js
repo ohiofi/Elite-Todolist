@@ -78,16 +78,16 @@ class Task {
         this.bgColor     = bgColor  || random(BACKGROUND_COLORS);
         // this.id          = id       || GenerateId();  
 
-        let menuBg = this.bgColor.getColor()
-        let menuStroke = STROKE_COLOR.getColor()
+        //let menuBg = this.bgColor.getColor()
+        //let menuStroke = STROKE_COLOR.getColor()
 
         this.menu = new Menu(
             0,
             0, 
             100, 
             105,
-            color(menuBg[0],menuBg[1],menuBg[2]), 
-            color(menuStroke[0],menuStroke[1],menuStroke[2]), 
+            this.bgColor, 
+            STROKE_COLOR, 
             this
         );
     }

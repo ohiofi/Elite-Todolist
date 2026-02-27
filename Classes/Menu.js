@@ -9,8 +9,8 @@ class Menu {
         this.y = y;
         this.width = width;
         this.height = height;
-        this.bgColor = bgColor;
-        this.borderColor = borderColor;
+        this.bgColor = bgColor.copy();
+        this.borderColor = borderColor.copy();
         this.task = task;
 
         this.markTaskDoneButton = createButton(`Mark Done`);
@@ -28,7 +28,7 @@ class Menu {
         this.moveTaskUpButton = createButton(`⬆️`);
         this.moveTaskUpButton.hide();
         this.moveTaskUpButton.mousePressed(() => this.slidePosition(1));
-        
+
         this.moveTaskDownButton = createButton(`⬇️`);
         this.moveTaskDownButton.hide();
         this.moveTaskDownButton.mousePressed(() => this.slidePosition(-1));
@@ -115,8 +115,14 @@ class Menu {
         this.mainBox.style(`width: ${[this.width]}px`);
         this.mainBox.style(`height: ${[this.height]}px`);
         this.mainBox.style("z-index: 2");
-        this.mainBox.style(`background-color: ${[this.bgColor]}`);
-        this.mainBox.style(`border: 5px solid ${[this.borderColor]}`);
+        if (theme === "default") {
+            this.mainBox.style(`background-color: ${[color(this.bgColor.getColor()[0], this.bgColor.getColor()[1], this.bgColor.getColor()[2])]}`);
+            this.mainBox.style(`border: 3px solid ${[color(this.borderColor.getColor()[0], this.borderColor.getColor()[1], this.borderColor.getColor()[2])]}`);
+        } else if (theme === "dark") {
+            this.mainBox.style(`background-color: ${[color(this.bgColor.toDarkMode().getColor()[0], this.bgColor.toDarkMode().getColor()[1], this.bgColor.toDarkMode().getColor()[2])]}`);
+            this.mainBox.style(`border: 3px solid ${[color(this.borderColor.getColor()[0], this.borderColor.getColor()[1], this.borderColor.getColor()[2])]}`);
+        }
+
         this.mainBox.style(`border-radius: 10px`);
         this.mainBox.show();
 
@@ -158,12 +164,12 @@ class Menu {
         this.mainBox.hide();
     }
 
-    editTask(){
+    editTask() {
         let editName = prompt("Input new task name:", this.task.name);
-        switch(editName){
+        switch (editName) {
             case null:
                 return;
-            break;
+                break;
 
             default:
                 this.task.name = editName;
@@ -171,17 +177,17 @@ class Menu {
         }
 
         let editDesc = prompt("Input new task description:", this.task.description);
-        switch(editDesc){
+        switch (editDesc) {
             case null:
                 saveAllLists();
                 return;
-            break;
+                break;
 
             default:
                 this.task.description = editDesc;
                 saveAllLists();
         }
-        
+
         hideAllMenus();
     }
 
@@ -199,7 +205,7 @@ class Menu {
         }
 
         list.move(taskIndex, direction);
-        
+
         hideAllMenus();
         refresh();
         saveAllLists();

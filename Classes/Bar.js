@@ -11,7 +11,7 @@ class Bar{
         this.addListButton.hide();
         this.addListButton.mousePressed(() => this.buttonPressedMakeList());
 
-        this.addDarkModeButton = createButton(`Dark Mode`);
+        this.addDarkModeButton = createButton(`Toggle Dark Mode`);
         this.addDarkModeButton.hide();
         this.addDarkModeButton.mousePressed(() => this.buttonPressedToggleDarkMode());
     }
@@ -57,7 +57,7 @@ class Bar{
         let xOffset = 40;
         let yOffset = this.height/4;
         this.addListButton.position(this.x + xOffset, this.y + yOffset);
-        this.addDarkModeButton.position(this.width - xOffset * 3, this.y + yOffset);
+        this.addDarkModeButton.position(this.width - xOffset * 4.5, this.y + yOffset);
 
         this.addListButton.style("padding", "12px 20px"); 
         this.addListButton.style("font-size", "20px"); 
