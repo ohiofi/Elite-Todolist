@@ -1,20 +1,27 @@
 let listArray   = [];
 const X_START   = 10;
-const X_PADDING = 410
+const X_PADDING = 410;
 let menuBar;
+let theme = "default";
 // sorry i couldnt think of a better solution for spacing them out
 // well actually i probably could but minimum viable product yknow
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  menuBar = new Bar(10, 10, windowWidth - 20, 75, 15, 200)
+  menuBar = new Bar(10, 10, windowWidth - 20, 75, 15, 200);
 
   let i = 0;
-  while (localStorage.getItem(i.toString())/* !== null (uncomment if this doesnt work)*/) {
+  while (localStorage.getItem(i.toString())) {
     let list = new List();
     list.loadFromLocalStorage(i.toString());
-    listArray.push(list);
+    if (list.name === "Archive") {
+      let archive = new ArchiveList();
+      archive.loadFromLocalStorage(i.toString());
+      listArray.push(archive);
+    } else {
+      listArray.push(list);
+    }
     i++;
   }
 
@@ -35,8 +42,12 @@ function setup() {
 }
 
 function draw() {
-  background(220);
-  showTasks();
+  if (theme === "default") {
+    background(220);
+  } else if (theme === "dark") {
+    background(0);
+  }
+  showLists();
   menuBar.show();
 }
 
@@ -45,23 +56,23 @@ function draw() {
 //   x = 10;
 //   for (const each of listArray) {
 //     each.show(x, true);
-//     x += 410
+//     x += 410;
 //   }
 // }
 
 function refresh(){
   background(220);
   if(listArray.length <= 0){
-    return
+    return;
   }
-  showTasks()
+  showLists();
 }
 
-function showTasks() {
+function showLists() {
   for (let index = 0; index < listArray.length; index++) { //may or may not have forgotten how to use for loops for indices
-    let task = listArray[index]
-    let taskPos = X_START + (index * X_PADDING)
-    task.show(taskPos, false) //keeping this false in just to be safe
+    let list = listArray[index];
+    let taskPos = X_START + (index * X_PADDING);
+    list.show(taskPos, false); //keeping this false in just to be safe
   }
 }
 
@@ -73,8 +84,13 @@ function windowResized() {
 
 function saveAllLists(){
   for(let i = 0; i < listArray.length; i++){
-    listArray[i].pushToLocalStorage(i.toString());
+    saveSingleList(i);
   }
+}
+
+function saveSingleList(index) {
+  let list = listArray[index];
+  list.pushToLocalStorage(index.toString());
 }
 
 function getNewTask(){
@@ -85,12 +101,21 @@ function getNewTask(){
 
 function getNewList(){
     let name =  prompt("Input the list name:");
-    return new List(name);
+    if (name === "Archive") {
+      return new ArchiveList();
+    } else {
+      return new List(name);
+    }
 }
 
 function styleButton(btn) {
-  btn.style("background-color", "#ffffff"); 
-  btn.style("color", "#000000");             
+  if (theme === "default") {
+    btn.style("background-color", "#ffffff"); 
+    btn.style("color", "#000000"); 
+  } else if (theme === "dark") {
+    btn.style("background-color", "#000000"); 
+    btn.style("color", "#ffffff"); 
+  }      
   btn.style("border", "2px solid #64e6ff"); 
   btn.style("padding", "8px 16px");
   btn.style("border-radius", "6px");
@@ -98,3 +123,8 @@ function styleButton(btn) {
   btn.style("cursor", "pointer");
 }
 
+function hideAllMenus(){
+  for(let list of listArray){
+    list.hideTasksMenus();
+  }
+}

@@ -4,7 +4,7 @@ const TASK_STATES = {
     DONE: "Done",
     ARCHIVED: "Archived",
     DELETED: "Deleted"
-}
+};
 
 //defaults for instance vars
 const DEFAULT_TASK_NAME   = "New Task";
@@ -14,12 +14,12 @@ const DEFAULT_POSITION    = 0;
 const DEFAULT_FINISHED    = false;
 
 //text sizes
-const NAME_SIZE           = 25
-const DESC_SIZE           = 16
-const STATUS_SIZE         = 16
+const NAME_SIZE           = 25;
+const DESC_SIZE           = 16;
+const STATUS_SIZE         = 16;
 
 //text font
-const TEXT_FONT           = "Courier New" //TODO: change the font to something thats actually good (this is just one i picked randomly)
+const TEXT_FONT           = "Courier New"; //TODO: change the font to something thats actually good (this is just one i picked randomly)
 
 //colors, lots of colors
 const BACKGROUND_COLORS   = [
@@ -33,19 +33,21 @@ const BACKGROUND_COLORS   = [
     new Color(60, 110, 113), 
     new Color(58, 90, 64), 
     new Color(52, 78, 65)
-]
-const NAME_COLOR          = new Color()
-const DESC_COLOR          = new Color(100)
-const DEFAULT_WHITE       = new Color(255)
+];
+const NAME_COLOR          = new Color();
+const NAME_COLOR_STROKE   = NAME_COLOR.toInverted() ;
+const DESC_COLOR          = new Color(100);
+const DESC_COLOR_STROKE   = DESC_COLOR.toInverted();
+const DEFAULT_WHITE       = new Color(255);
 
-const TASK_FILL           = new Color(255)
-const STROKE_COLOR        = new Color(100, 230, 255)
+const TASK_FILL           = new Color(255);
+const STROKE_COLOR        = new Color(100, 230, 255);
 const STATUS_COLORS       = {
     Default: new Color(),
     Todo:    new Color(255, 0,   0),
     Doing:   new Color(255, 255, 0),
     Done:    new Color(0,   255, 0),
-}
+};
 
 //confirm button settings (offsets so far)
 const CONFIRM_X_OFFSET    = 10;
@@ -62,40 +64,47 @@ const TEXT_Y_OFFSET       = 0;   //not used yet
 const TEXT_Y_PADDING      = 30;
 
 //id settings
-const ID_MIN              = 10000
-const ID_MAX              = 99999
+const ID_MIN              = 10000;
+const ID_MAX              = 99999;
 
 class Task {
-    constructor(name, desc, status, position, id) { 
+    constructor(name, desc, status, position, id, bgColor) { 
         this.name        = name     || DEFAULT_TASK_NAME;
         this.description = desc     || DEFAULT_DESCRIPTION;
         this.status      = status   || DEFAULT_STATUS;
         this.position    = position || DEFAULT_POSITION;
         this.finished    =             DEFAULT_FINISHED;  
-        this.id          = id       || GenerateId()     
-        //uncomment this if u prefer this one
-        // this.id          = id       || Math.floor(Date.now() / ((Math.random() * 10000) + 500))
-        this.bgColor = random(BACKGROUND_COLORS).getColor();
+        this.id          = id       || Math.floor(Date.now() / ((Math.random() * 10000) + 500));
+        this.bgColor     = bgColor  || random(BACKGROUND_COLORS);
+        // this.id          = id       || GenerateId();  
 
-        this.id = Math.floor(Date.now() / ((Math.random() * 10000) + 500))
+        //let menuBg = this.bgColor.getColor()
+        //let menuStroke = STROKE_COLOR.getColor()
 
-        this.menu = new Menu(0,0, 100, 105,color(this.bgColor[0],this.bgColor[1],this.bgColor[2]), color(STROKE_COLOR.getColor()[0],STROKE_COLOR.getColor()[1],STROKE_COLOR.getColor()[2]), this)
-
+        this.menu = new Menu(
+            0,
+            0, 
+            100, 
+            105,
+            this.bgColor, 
+            STROKE_COLOR, 
+            this
+        );
     }
 
     //getters and setters
-    getName()     { return this.name }
-    getDesc()     { return this.description }
-    getStatus()   { return this.status }
-    getPosition() { return this.position}
-    getId()       { return this.id }
-    isFinished()  { return this.finished }
+    getName()     { return this.name; }
+    getDesc()     { return this.description; }
+    getStatus()   { return this.status; }
+    getPosition() { return this.position; }
+    getId()       { return this.id; }
+    isFinished()  { return this.finished; }
 
-    setName(newName)       { this.name        = newName   || DEFAULT_TASK_NAME }
-    setDesc(newDesc)       { this.description = newDesc   || DEFAULT_DESCRIPTION }
-    setStatus(newStatus)   { this.status      = newStatus || DEFAULT_STATUS }
-    setPosition(newPos)    { this.position    = newPos    || DEFAULT_POSITION }
-    setFinished(condition) { this.finished    = condition || DEFAULT_FINISHED }
+    setName(newName)       { this.name        = newName   || DEFAULT_TASK_NAME; }
+    setDesc(newDesc)       { this.description = newDesc   || DEFAULT_DESCRIPTION; }
+    setStatus(newStatus)   { this.status      = newStatus || DEFAULT_STATUS; }
+    setPosition(newPos)    { this.position    = newPos    || DEFAULT_POSITION; }
+    setFinished(condition) { this.finished    = condition || DEFAULT_FINISHED; }
 
     //im not saying that this method should be in the list but it should definitely be in the list
     setArchived() {
@@ -118,27 +127,28 @@ class Task {
 
     //methods
     toString() {
-        let output = ""
+        let output = "";
 
-        output += `Name: ${this.name}\n`
-        output += `Description: ${this.description}\n`
-        output += `Status: ${this.status}\n`
-        output += `Position: ${this.position}\n`
-        output += `Is Finished: ${this.finished}`
+        output += `Name: ${this.name}\n`;
+        output += `Description: ${this.description}\n`;
+        output += `Status: ${this.status}\n`;
+        output += `Position: ${this.position}\n`;
+        output += `Is Finished: ${this.finished}`;
 
         return output;
     }
 
    toSaveString() {
-        let saveString = ""
+        let saveString = "";
 
-        saveString += this.getName() + "|"
-        saveString += this.getDesc() + "|"
-        saveString += this.getStatus() + "|"
-        saveString += this.getPosition() + "|"
-        saveString += this.getId() + ""
+        saveString += this.getName() + "|";
+        saveString += this.getDesc() + "|";
+        saveString += this.getStatus() + "|";
+        saveString += this.getPosition() + "|";
+        saveString += this.getId() + "|";
+        saveString += this.bgColor.toSaveString() + "";
 
-        return saveString
+        return saveString;
     }
   
     show(x, y) {
@@ -150,52 +160,48 @@ class Task {
         this.menu.y = this.y;
 
         // main box
-        strokeWeight(3)
-        stroke(STROKE_COLOR.getColor())
+        strokeWeight(3);
+        stroke(STROKE_COLOR.getColor());
         push();
-        fill(this.bgColor)
+        if (theme === "default") {
+            fill(this.bgColor.getColor());
+        } else if (theme === "dark") {
+            fill(this.bgColor.toDarkMode().getColor());
+        }
         rect(x, y, 380, 120, 10);
         pop();
 
         // sets pos of buttons        
-        this.menu.moveTaskUpButton.position(x + 10, y+7);
-        this.menu.moveTaskDownButton.position(x + 10, y+90);
         this.menu.menuButton.position(x + 345, y + 7);
 
         //show move task up/down buttons
-        this.menu.moveTaskUpButton.show();
-        this.menu.moveTaskDownButton.show();
         this.menu.menuButton.show();
 
-        //sets button styles.
-        this.menu.moveTaskUpButton.style('z-index', '1');
-        this.menu.moveTaskDownButton.style('z-index', '1');
-
-        //sets button position style.
-        this.menu.moveTaskUpButton.style('position', 'absolute');
-        this.menu.moveTaskDownButton.style('position', 'absolute');
-
-        strokeWeight(0);
+        strokeWeight(1);
         // text slop
-        textFont(TEXT_FONT)
+        textFont(TEXT_FONT);
         //name
         textAlign(CENTER, CENTER);
         fill(NAME_COLOR.getColor());
+        stroke(NAME_COLOR_STROKE.getColor());
         textSize(NAME_SIZE);
         text(this.name, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING);
 
         //desc
         fill(DESC_COLOR.getColor());
+        stroke(DESC_COLOR_STROKE.getColor());
         textSize(DESC_SIZE);
         text(this.description, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING * 2);
 
         //status
         fill(STATUS_COLORS[this.status].getColor() || STATUS_COLORS["Default"].getColor());
-        textSize(STATUS_SIZE)
+        textSize(STATUS_SIZE);
         text(this.status, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING * 3);
 
         fill(DEFAULT_WHITE.getColor());
         strokeWeight(1);
+
+        this.menu.show();
     }
 
     static fromJSON(data) {
@@ -222,25 +228,27 @@ class Task {
     }
 }
 
-let generatedIds = {} //array to store already generated ids (avoids the low chance of getting the same id twice)
-//Generates a random id for the task (probably redundant)
+let generatedIds = []; //array to store already generated ids (avoids the low chance of getting the same id twice)
+
+//Generates a random id for the task
 function GenerateId() {
-    let generatedId
-    let idValid = false
+    let generatedId;
+    let idValid = false;
 
     while (!idValid) {
-        generatedId = Math.floor(Math.random() * ID_MAX) + ID_MIN
+        generatedId = Math.floor(Math.random() * ID_MAX) + ID_MIN;
         
         //extra code to make it loop back around if the id is already created (too many lines for such an unlikely problem)
-        idValid = true
+        idValid = true;
         for (let id in generatedIds) {
-            if (!(rand == id)) {
-                console.warn("ID is already created!")
-                continue
+            if (generatedId == id) {
+                console.warn("ID is already created!");
+                continue;
             }
-            idValid = false
+            idValid = false;
+            generatedIds.push(generatedId);
         }
     }
 
-    return generatedId
+    return generatedId;
 }
