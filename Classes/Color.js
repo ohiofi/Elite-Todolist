@@ -79,13 +79,9 @@ class Color {
     }
 
     //just invert but darker, nothing else i can do
-    toggleDarkMode(darkModeEnabled) {
+    toDarkMode() {
         let colorDiff = -200
-        if (darkModeEnabled) {
-            colorDiff *= -1 //reverses if dark mode is enabled
-        }
-        let newColor = this.copy()
-        
+       
         let colorVals = []
         
         for (let colorVal of newColor.getColor()) {
@@ -95,9 +91,7 @@ class Color {
           colorVals.push(newVal)
         }
 
-        newColor.changeColor(colorVals[0], colorVals[1], colorVals[2])
-
-        return newColor
+        return new Color(colorVals[0], colorVals[1], colorVals[2])
     }
 
     //no clue why anyone would use p5 colors over this but whatever (transparency or something?)
