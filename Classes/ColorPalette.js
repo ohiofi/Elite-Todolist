@@ -1,4 +1,4 @@
-const DEFAULT_PALETTE_NAME = "DeepBlue" //TODO: add a way for the user to change the theme themselves
+const DEFAULT_PALETTE_NAME = "Default" //TODO: add a way for the user to change the theme themselves
 
 class ColorPalette {
     constructor(lTextP, lBg, lB, eBg, eS, eTextP, eTextS, bg, font) { //ik how much i stress readability but i am NOT typing allat
@@ -101,7 +101,7 @@ const PresetPalettes = {
         new Color(1, 58, 99),
         "Arial",
     ),
-    ["1x1x1x1"]: new ColorPalette(
+    "1x1x1x1": new ColorPalette(
         new Color(255,0,0),
         new Color(11, 101, 11),
         new Color(0, 140, 0),
