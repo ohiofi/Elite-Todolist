@@ -48,10 +48,92 @@
             AssertEqual(1, storage.length);
         }
 
+
+                function testConvertTaskFromSaveString() {
+            // Format: Name|Desc|Status|Position|Id
+            let mockSaveString = "Finish Project|work|Todo|0|999";
+
+
+            let task = convertTaskFromSaveString(mockSaveString);
+
+
+            AssertEqual("Finish Project", task.getName());
+            AssertEqual("work", task.getDesc());
+            AssertEqual("Todo", task.getStatus());
+            AssertEqual(0, task.getPosition());
+            AssertEqual(999, task.getId());
+        }
+
+
+        function testPushToLocalStorage() {
+            let testList = new List("SaveTest");
+            let testTask = new Task("Task1", "Desc1");
+
+
+            testList.addTask(testTask);
+
+
+            const testKey = "test_list_key";
+            testList.pushToLocalStorage(testKey);
+
+
+            let storedValue = localStorage.getItem(testKey);
+
+
+            // Expected format:
+            // ListName&TaskName|TaskDesc|Status|Position|Id
+            let expectedStart = "SaveTest&Task1|Desc1";
+            let actualStart = storedValue.substring(0, expectedStart.length);
+
+
+            AssertEqual(expectedStart, actualStart);
+
+
+            localStorage.removeItem(testKey);
+        }
+
+
+        function testLoadFromLocalStorage() {
+            const testKey = "load_test_key";
+
+
+            // Create and save a list
+            let originalList = new List("LoadTest");
+            let task1 = new Task("TaskA", "DescA");
+            let task2 = new Task("TaskB", "DescB");
+
+
+            originalList.addTask(task1);
+            originalList.addTask(task2);
+
+
+            originalList.pushToLocalStorage(testKey);
+
+
+            // Load into a new list object
+            let loadedList = new List();
+            loadedList.loadFromLocalStorage(testKey);
+
+
+            AssertEqual("LoadTest", loadedList.getName());
+            AssertEqual(2, loadedList.getStorage().length);
+
+
+            let loadedTask = loadedList.getStorage()[0];
+            AssertEqual("TaskA", loadedTask.getName());
+            AssertEqual("DescA", loadedTask.getDesc());
+
+
+            localStorage.removeItem(testKey);
+        }
+
+
         //TODO: add more tests
         function setup() { // p5js setup function
             TestBlank();
             TestTaskAdded();
+            testConvertTaskFromSaveString();
+            testPushToLocalStorage();
         }
     </script>
 </body>

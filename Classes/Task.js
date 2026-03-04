@@ -67,6 +67,9 @@ class Task {
         this.bgColor     = BACKGROUND_COLOR;
         // this.id          = id       || GenerateId();  
 
+        //let menuBg = this.bgColor.getColor()
+        //let menuStroke = STROKE_COLOR.getColor()
+
         this.menu = new Menu(
             0,
             0, 
@@ -147,10 +150,14 @@ class Task {
         menu.y = this.y;
 
         // main box
-        strokeWeight(3)
+        strokeWeight(3);
         stroke(STROKE_COLOR.getColor());
         push();
-        fill(this.bgColor.getColor());
+        if (theme === "default") {
+            fill(this.bgColor.getColor());
+        } else if (theme === "dark") {
+            fill(this.bgColor.toDarkMode().getColor());
+        }
         rect(x, y, 380, 120, 10);
         pop();
 

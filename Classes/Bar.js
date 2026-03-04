@@ -11,6 +11,10 @@ class Bar{
         this.addListButton = createButton(`Add list`);
         this.addListButton.hide();
         this.addListButton.mousePressed(() => this.buttonPressedMakeList());
+
+        this.addDarkModeButton = createButton(`Toggle Dark Mode`);
+        this.addDarkModeButton.hide();
+        this.addDarkModeButton.mousePressed(() => this.buttonPressedToggleDarkMode());
     }
 
     buttonPressedMakeList(){
@@ -29,26 +33,45 @@ class Bar{
         saveAllLists();
     }
 
+    buttonPressedToggleDarkMode(){
+        if (theme != "default") {
+            theme = "default";
+        } else {
+            theme = "dark";
+        }
+    }
+
 
     show(){
         strokeWeight(5)
-        stroke(this.borderColor.getColor());
         
-        fill(this.color.getColor());
+        if (theme === "default") {
+            stroke(this.borderColor.getColor());
+            fill(this.color.getColor());
+        } else if (theme === "dark") {
+            stroke(this.borderColor.toDarkMode().getColor());
+            fill(this.color.toDarkMode().getColor());
+        }
+        
         rect(this.x, this.y, this.width, this.height, this.cornerCouverture);
 
         
         //sets pos of buttons
-        let xOffest = 40;
-        let yOffest = this.height/4;
-        this.addListButton.position(this.x + xOffest, this.y + yOffest);
+        let xOffset = 40;
+        let yOffset = this.height/4;
+        this.addListButton.position(this.x + xOffset, this.y + yOffset);
+        this.addDarkModeButton.position(this.width - xOffset * 4.5, this.y + yOffset);
 
         this.addListButton.style("padding", "12px 20px"); 
         this.addListButton.style("font-size", "20px"); 
+        this.addDarkModeButton.style("padding", "12px 20px"); 
+        this.addDarkModeButton.style("font-size", "20px"); 
 
         styleButton(this.addListButton);
+        styleButton(this.addDarkModeButton);
         //shows buttons
         this.addListButton.show();
+        this.addDarkModeButton.show();
     }
     
 }
