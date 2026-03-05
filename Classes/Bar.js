@@ -22,10 +22,10 @@ class Bar{
         if(listArray.length > 0 && listArray[listArray.length - 1].name == "Archive"){
             let temp = listArray[listArray.length - 1];
             listArray.pop();
-            listArray.push(getNewList());
+            listArray.push(Modal.getNewList());
             listArray.push(temp);
         }else{
-            listArray.push(getNewList());
+            listArray.push(Modal.getNewList());
         }
 
         hideAllMenus();
