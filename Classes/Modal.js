@@ -5,13 +5,11 @@ class Modal{
         this.closeButton = this.modal.querySelector(".close-button"); //selects modal from index.html
     }
     open(){
-        this.modal.style.display = "block";//modal appears
         if(this.modal.showModal){
             this.modal.showModal();
         }
     }
     close(){
-        this.modal.style.display = "none";//modal disappears
         if(this.modal.close){
             this.modal.close();
         }
