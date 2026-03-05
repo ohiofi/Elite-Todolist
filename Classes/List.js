@@ -127,7 +127,7 @@ class List {
     }
     
     buttonPressedAddTask(){
-        this.addTask(getNewTask());
+        this.addTask(Modal.getNewTask());
         //this.addTask(new Task());
         hideAllMenus();
         refresh();
