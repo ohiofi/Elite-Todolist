@@ -191,7 +191,7 @@ class Task {
         fill(DEFAULT_WHITE.getColor());
         //strokeWeight(1);
 
-        menu.show();
+        this.menu.showTaskMenu();
     }
 
     static fromJSON(data) {

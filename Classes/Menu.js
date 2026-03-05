@@ -2,17 +2,21 @@
 const MENU_X_OFFSET = 370;
 const MENU_Y_OFFSET = 6;
 
+const LIST_MENU_X_OFFSET = 395;
+const LIST_MENU_Y_OFFSET = 105;
+
 class Menu {
 
-    constructor(x, y, width, height, bgColor, borderColor, task) {
+    constructor(x, y, width, height, bgColor, borderColor, parent) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.bgColor = bgColor.copy();
-        this.borderColor = borderColor.copy();
-        this.task = task;
+        this.bgColor = bgColor;
+        this.borderColor = borderColor;
+        this.parent = parent;
 
+        //task buttons
         this.markTaskDoneButton = createButton(`Mark Done`);
         this.markTaskDoneButton.hide();
         this.markTaskDoneButton.mousePressed(() => this.buttonPressedMarkDone());
@@ -37,6 +41,19 @@ class Menu {
         this.menuButton.hide();
         this.menuButton.mousePressed(() => this.buttonPressedMenu());
 
+        //list buttons
+        this.addTaskButton = createButton(`Add Task`);
+        this.addTaskButton.hide();
+        this.addTaskButton.mousePressed(() => this.buttonPressedAddTask());
+
+        this.deleteListButton = createButton(`Delete List`);
+        this.deleteListButton.hide();
+        this.deleteListButton.mousePressed(() => this.buttonPressedDeleteList());
+
+        this.editListButton = createButton(`Edit List`);
+        this.editListButton.hide();
+        this.editListButton.mousePressed(() => this.editList());
+
         this.mainBox = createDiv();
 
     }
@@ -46,16 +63,16 @@ class Menu {
     }
 
     buttonPressedMarkDone() {
-        this.task.setCompleted();
+        this.parent.setCompleted();
         let list = this.getListTask();
         for (let i = 0; i < listArray.length; i++) {
             if (listArray[i].getName() === "Archive") {
-                list.moveTask(listArray[i], this.task);
+                list.moveTask(listArray[i], this.parent);
                 break;
             }
             if (i === listArray.length - 1) {
                 listArray.push(new ArchiveList("Archive"));
-                list.moveTask(listArray[i + 1], this.task);
+                list.moveTask(listArray[i + 1], this.parent);
                 break;
             }
         }
@@ -66,30 +83,97 @@ class Menu {
         saveAllLists();
     }
 
-    buttonPressedDelete() {
-        let list = this.getListTask();
-        this.deleteTaskButtons();
-        list.removeTask(this.task);
-        list.setTasksPositions();
-        this.deleteMenu();
+    buttonPressedAddTask(){
+        this.parent.addTask(getNewTask());
+        //this.addTask(new Task());
         hideAllMenus();
         refresh();
         saveAllLists();
     }
 
+    deleteListButtons(){
+        this.addTaskButton.remove();
+        this.deleteListButton.remove();
+        this.editListButton.remove();
+        this.menuButton.remove();
+    }
+
+    buttonPressedDeleteList(){
+        this.deleteListButtons();
+        this.deleteListTaskButtons();
+        this.mainBox.remove();
+        localStorage.clear();
+        listArray.splice(listArray.indexOf(this.parent), listArray.indexOf(this.parent) >= 0 ? 1 : 0);
+        hideAllMenus()
+        refresh();
+        saveAllLists();
+    }
+
+    deleteListTaskButtons(){
+        for(let task of this.parent.listStorage){
+            task.menu.deleteTaskButtons();
+        }
+    }
+
+    editList(){
+        let editName = prompt("Input new list name:", this.parent.name);
+        switch(editName){
+            case null:
+                return;
+            break;
+
+            default:
+                this.parent.name = editName;
+                saveAllLists();
+        }
+
+        hideAllMenus();
+    }
+
+    buttonPressedDelete() {
+        let list = this.getListTask();
+        this.deleteTaskButtons();
+        list.removeTask(this.parent);
+        list.setTasksPositions();
+        this.deleteMenu();
+        hideAllMenus();
+        refresh();
+        saveAllLists(); 
+    }
+
     closeMenu() {
-        this.taskMenuOpen = false;
-        this.hideMenuButtons();
+        if(this.parent instanceof Task){
+            this.taskMenuOpen = false;
+            this.hideTaskMenuButtons();
+            return;
+        }else if(this.parent instanceof List){
+            this.listMenuOpen = false;
+            this.hideListMenuButtons();
+            return;
+        }
+        
+        
     }
 
     buttonPressedMenu() {
-        if (!this.taskMenuOpen) {
-            hideAllMenus()
-            this.taskMenuOpen = true;
-            return;
-        } else if (this.taskMenuOpen) {
-            this.closeMenu();
+        if(this.parent instanceof Task){
+           if (!this.taskMenuOpen) {
+                hideAllMenus()
+                this.taskMenuOpen = true;
+                return;
+            } else if (this.taskMenuOpen) {
+                this.closeMenu();
+            } 
+        }else if(this.parent instanceof List){
+            if (!this.listMenuOpen) {
+                hideAllMenus()
+                this.listMenuOpen = true;
+                return;
+            } else if (this.listMenuOpen) {
+                this.closeMenu();
+            } 
         }
+        
 
     }
 
@@ -102,11 +186,11 @@ class Menu {
         this.menuButton.remove();
     }
 
-    show() {
+    showTaskMenu() {
 
-        if (!this.taskMenuOpen) {
-            return;
-        }
+         if (!this.taskMenuOpen) {
+             return;
+         }
 
         const pos = { x: this.x, y: this.y };
 
@@ -155,7 +239,47 @@ class Menu {
         this.moveTaskDownButton.style('position', 'absolute');
     }
 
-    hideMenuButtons() {
+    showListMenu() {
+
+        if (!this.listMenuOpen) {
+            return;
+        }
+
+        const pos = { x: this.parent.x, y: this.y };
+
+        // main box
+        this.mainBox.position(pos.x + LIST_MENU_X_OFFSET, pos.y + LIST_MENU_Y_OFFSET);
+        this.mainBox.style(`width: ${[this.width]}px`);
+        this.mainBox.style(`height: ${[this.height]}px`);
+        this.mainBox.style("z-index: 2");
+        this.mainBox.style(`background-color: ${[this.bgColor]}`);
+        this.mainBox.style(`border: 5px solid ${[this.borderColor]}`);
+        this.mainBox.style(`border-radius: 10px`);
+        this.mainBox.show();
+
+        // sets pos of buttons
+        this.addTaskButton.position(pos.x + LIST_MENU_X_OFFSET + 7, pos.y + LIST_MENU_Y_OFFSET + 7);
+        this.deleteListButton.position(pos.x + LIST_MENU_X_OFFSET + 7, pos.y + LIST_MENU_Y_OFFSET + 30);
+        this.editListButton.position(pos.x + LIST_MENU_X_OFFSET + 7, pos.y + LIST_MENU_Y_OFFSET + 53);
+
+        //show move task up/down buttons
+        this.addTaskButton.show();
+        this.deleteListButton.show();
+        this.editListButton.show();
+
+        //menu buttons style.
+        this.addTaskButton.style('z-index', '3');
+        this.deleteListButton.style('z-index', '3');
+        this.editListButton.style('z-index', '3');
+
+        //menu buttons position style.
+        this.addTaskButton.style('position', 'absolute');
+        this.deleteListButton.style('position', 'absolute');
+        this.editListButton.style('position', 'absolute');
+
+    }
+
+    hideTaskMenuButtons() {
         this.markTaskDoneButton.hide();
         this.deleteTaskButton.hide();
         this.editTaskButton.hide();
@@ -164,27 +288,36 @@ class Menu {
         this.mainBox.hide();
     }
 
-    editTask() {
-        let editName = prompt("Input new task name:", this.task.name);
-        switch (editName) {
+    hideListMenuButtons(){
+        this.addTaskButton.hide();
+        this.deleteListButton.hide();
+        this.editListButton.hide();
+        this.mainBox.hide();
+    }
+
+    
+
+    editTask(){
+        let editName = prompt("Input new task name:", this.parent.name);
+        switch(editName){
             case null:
                 return;
                 break;
 
             default:
-                this.task.name = editName;
+                this.parent.name = editName;
                 saveAllLists();
         }
 
-        let editDesc = prompt("Input new task description:", this.task.description);
-        switch (editDesc) {
+        let editDesc = prompt("Input new task description:", this.parent.description);
+        switch(editDesc){
             case null:
                 saveAllLists();
                 return;
                 break;
 
             default:
-                this.task.description = editDesc;
+                this.parent.description = editDesc;
                 saveAllLists();
         }
 
@@ -194,7 +327,7 @@ class Menu {
     slidePosition(direction) {
         let list = this.getListTask();
         // console.log(list);
-        let taskIndex = this.task.position
+        let taskIndex = this.parent.position
 
         if (direction == 0) { //avoids dividing by zero and other stuff that will break the app
             return;
@@ -215,7 +348,7 @@ class Menu {
     getListTask() {
         for (let list of listArray) {
             let storage = list.getStorage();
-            if (storage.findIndex(t => t.id === this.task.id) != -1) {
+            if (storage.findIndex(t => t.id === this.parent.id) != -1) {
                 return list;
             }
         }

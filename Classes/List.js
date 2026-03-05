@@ -10,13 +10,15 @@ class List {
         this.name = name || DEFAULT_LIST_NAME;
         this.listStorage = [];
 
-        this.addTaskButton = createButton(`Add Task`);
-        this.addTaskButton.hide();
-        this.addTaskButton.mousePressed(() => this.buttonPressedAddTask());
-
-        this.deleteListButton = createButton(`Delete List`);
-        this.deleteListButton.hide();
-        this.deleteListButton.mousePressed(() => this.buttonPressedDeleteList());
+        this.menu = new Menu(
+            0,
+            0, 
+            100, 
+            105,
+            color(255,255,255), 
+            color(0,0,0), 
+            this
+        );
     }
 
     //Getters
@@ -120,37 +122,6 @@ class List {
         this.removeTask(task);
     }
 
-    deleteListButtons(){
-        this.addTaskButton.remove();
-        this.deleteListButton.remove();
-        saveAllLists();
-    }
-    
-    buttonPressedAddTask(){
-        this.addTask(Modal.getNewTask());
-        //this.addTask(new Task());
-        hideAllMenus();
-        refresh();
-        saveAllLists();
-    }
-
-    deleteTaskButtons() {
-        for (let task of this.getStorage()) {
-            task.menu.deleteTaskButtons();
-        }
-        saveAllLists();
-    }
-
-    buttonPressedDeleteList(){
-        this.deleteListButtons();
-        this.deleteTaskButtons();
-        localStorage.clear();
-        listArray.splice(listArray.indexOf(this), listArray.indexOf(this) >= 0 ? 1 : 0);
-        hideAllMenus()
-        refresh();
-        saveAllLists();
-    }
-
     toString() {
         let output = `List: ${this.name}\n`;
 
@@ -214,6 +185,11 @@ class List {
     }
 
     show(x) {
+
+        this.x = x;
+
+        stroke(0);
+        fill(255);
         
         if (theme === "default") {
             stroke(LIST_BORDER_COLOR.getColor())
@@ -229,16 +205,11 @@ class List {
 
         rect(x, verticalOffsetTop, 400, windowHeight - verticalOffsetBottom, 15);
 
-        //sets pos of buttons
-        this.addTaskButton.position(x + 10, verticalOffsetTop + 10);
-        this.deleteListButton.position(x + 290, verticalOffsetTop + 10);
+        // sets pos of buttons        
+        this.menu.menuButton.position(x + 370,verticalOffsetBottom - 17);
 
-        styleButton(this.addTaskButton);
-        styleButton(this.deleteListButton);
-
-        //shows buttons
-        this.addTaskButton.show();
-        this.deleteListButton.show();
+        //show move task up/down buttons
+        this.menu.menuButton.show();
 
         // title
         strokeWeight(0)
@@ -263,6 +234,8 @@ class List {
             //console.log("show");
             this.showTasks(x)
         }
+
+        this.menu.showListMenu();
     }
 
     showTasks(x) {
@@ -275,6 +248,7 @@ class List {
     }
 
     hideTasksMenus() {
+        this.menu.closeMenu();
         for (let task of this.listStorage) {
             task.menu.closeMenu();
         }
