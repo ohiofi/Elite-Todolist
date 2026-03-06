@@ -1,10 +1,5 @@
 const DEFAULT_LIST_NAME = "New List";
 
-const LIST_TITLE_COLOR      = COLOR_PALETTE["ListTextPrimary"];
-const LIST_BACKGROUND_COLOR = COLOR_PALETTE["ListBg"];
-
-const LIST_BORDER_COLOR     = COLOR_PALETTE["ListBorder"]
-
 class List {
     constructor(name) {
         this.name = name || DEFAULT_LIST_NAME;
@@ -17,6 +12,10 @@ class List {
         this.deleteListButton = createButton(`Delete List`);
         this.deleteListButton.hide();
         this.deleteListButton.mousePressed(() => this.buttonPressedDeleteList());
+
+        this.titleColor = theme.getColor("ListTextPrimary")
+        this.backgroundColor = theme.getColor("ListBg")
+        this.borderColor = theme.getColor("ListBorder")
     }
 
     //Getters
@@ -214,13 +213,14 @@ class List {
     }
 
     show(x) {
-        
-        if (theme === "default") {
-            stroke(LIST_BORDER_COLOR.getColor())
-            fill(LIST_BACKGROUND_COLOR.getColor());
-        } else if (theme === "dark") {
-            stroke(LIST_BORDER_COLOR.toDarkMode().getColor())
-            fill(LIST_BACKGROUND_COLOR.toDarkMode().getColor());
+        if (mode === "default") {
+            stroke(this.borderColor.getColor());
+            fill(this.backgroundColor.getColor());
+        } else if (mode === "dark") {
+            let evilmodeColor = this.backgroundColor.toDarkMode()
+            let evilBorderColor = this.borderColor.toDarkMode()
+            stroke(evilBorderColor.getColor());
+            fill(evilmodeColor.getColor());
         }
         // box
         strokeWeight(5);
@@ -244,17 +244,18 @@ class List {
         strokeWeight(0)
         textFont(TEXT_FONT);
         textAlign(CENTER, CENTER);
-        if (theme === "default") {
+        if (mode === "default") {
             strokeWeight(0);
-            fill(LIST_TITLE_COLOR.getColor());
-        } else if (theme === "dark") {
+            fill(this.titleColor.getColor());
+        } else if (mode === "dark") {
+            let evilTitleColor = this.titleColor.toDarkMode()
             strokeWeight(3);
-            fill(LIST_TITLE_COLOR.toDarkMode().getColor());
+            fill(evilTitleColor.getColor());
         }
         textSize(24);
         
         text(this.name, x + 200, verticalOffsetTop + 20);
-        // fill(LIST_BACKGROUND_COLOR.getColor());
+        // fill(this.backgroundColor.getColor());
         textSize(12);
         strokeWeight(1);
 

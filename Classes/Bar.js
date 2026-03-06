@@ -5,8 +5,8 @@ class Bar{
         this.width = init_width;
         this.height = init_height;
         this.cornerCouverture = init_cornerCouverture;
-        this.color = COLOR_PALETTE["ListBg"];
-        this.borderColor = COLOR_PALETTE["ListBorder"]
+        this.color = theme["ListBg"];
+        this.borderColor = theme["ListBorder"]
 
         this.addListButton = createButton(`Add list`);
         this.addListButton.hide();
@@ -34,10 +34,10 @@ class Bar{
     }
 
     buttonPressedToggleDarkMode(){
-        if (theme != "default") {
-            theme = "default";
+        if (mode != "default") {
+            mode = "default";
         } else {
-            theme = "dark";
+            mode = "dark";
         }
     }
 
@@ -45,10 +45,10 @@ class Bar{
     show(){
         strokeWeight(5)
         
-        if (theme === "default") {
+        if (mode === "default") {
             stroke(this.borderColor.getColor());
             fill(this.color.getColor());
-        } else if (theme === "dark") {
+        } else if (mode === "dark") {
             stroke(this.borderColor.toDarkMode().getColor());
             fill(this.color.toDarkMode().getColor());
         }

@@ -84,7 +84,7 @@ class Color {
        
         let colorVals = []
         
-        for (let colorVal of newColor.getColor()) {
+        for (let colorVal of this.getColor()) {
           // console.log(Math.sqrt(colorVal))
           let newVal = Math.abs(colorVal + colorDiff)
           

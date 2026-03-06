@@ -2,10 +2,10 @@ let listArray   = [];
 const X_START   = 10;
 const X_PADDING = 410;
 
-let bgColor = COLOR_PALETTE["Background"].getColor()
+let bgColor = theme.getColor("Background")
 
 let menuBar;
-let theme = "default";
+let mode = "default";
 // sorry i couldnt think of a better solution for spacing them out
 // well actually i probably could but minimum viable product yknow
 
@@ -46,10 +46,11 @@ function setup() {
 
 function draw() {
   
-  if (theme === "default") {
-    background(bgColor);
-  } else if (theme === "dark") {
-    background(bgColor.toDarkMode());
+  if (mode === "default") {
+    background(bgColor.getColor());
+  } else if (mode === "dark") {
+    let evilBg = bgColor.toDarkMode()
+    background(evilBg);
   }
   showLists();
   menuBar.show();
@@ -113,10 +114,10 @@ function getNewList(){
 }
 
 function styleButton(btn) {
-  if (theme === "default") {
+  if (mode === "default") {
     btn.style("background-color", "#ffffff"); 
     btn.style("color", "#000000"); 
-  } else if (theme === "dark") {
+  } else if (mode === "dark") {
     btn.style("background-color", "#000000"); 
     btn.style("color", "#ffffff"); 
   }      

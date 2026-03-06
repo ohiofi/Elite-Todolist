@@ -7,13 +7,14 @@ class ArchiveList extends List {
 
     show(x) {
         strokeWeight(5)
-        
-        if (theme === "default") {
+        if (mode === "default") {
             stroke(LIST_BORDER_COLOR.getColor());
             fill(LIST_BACKGROUND_COLOR.getColor());
-        } else if (theme === "dark") {
-            stroke(LIST_BORDER_COLOR.toDarkMode().getColor());
-            fill(LIST_BACKGROUND_COLOR.toDarkMode().getColor());
+        } else if (mode === "dark") {
+            let evilmodeColor = LIST_BACKGROUND_COLOR.toDarkMode()
+            let evilBorderColor = LIST_BORDER_COLOR.toDarkMode()
+            stroke(evilBorderColor.getColor());
+            fill(evilmodeColor.getColor());
         }
         // box
         let verticalOffsetTop = 100;
@@ -39,12 +40,13 @@ class ArchiveList extends List {
       
        
         
-        if (theme === "default") {
+        if (mode === "default") {
             strokeWeight(0);
             fill(LIST_TITLE_COLOR.getColor());
-        } else if (theme === "dark") {
+        } else if (mode === "dark") {
+            let evilTitleColor = LIST_TITLE_COLOR.toDarkMode()
             strokeWeight(3);
-            fill(LIST_TITLE_COLOR.toDarkMode().getColor());
+            fill(evilTitleColor.getColor());
         }
         textSize(24);
       

@@ -19,18 +19,18 @@ const DESC_SIZE           = 16;
 const STATUS_SIZE         = 16;
 
 //text font
-const TEXT_FONT           = COLOR_PALETTE["Font"];
+const TEXT_FONT           = theme.getFont();
 
 //colors, lots of colors
-const BACKGROUND_COLOR    = COLOR_PALETTE["ElementBg"]
-const NAME_COLOR          = COLOR_PALETTE["ElementTextPrimary"]
+//const BACKGROUND_COLOR    = 
+const NAME_COLOR          = theme.getColor("ElementTextPrimary")
 const NAME_COLOR_STROKE   = NAME_COLOR.toInverted();
-const DESC_COLOR          = COLOR_PALETTE["ElementTextSecondary"]
+const DESC_COLOR          = theme.getColor("ElementTextSecondary")
 const DESC_COLOR_STROKE   = DESC_COLOR.toInverted();
 const DEFAULT_WHITE       = new Color(255);
 
-const TASK_FILL           = COLOR_PALETTE["ElementBg"];
-const STROKE_COLOR        = COLOR_PALETTE["ElementStroke"];
+const TASK_FILL           = theme.getColor("ElementBg");
+const STROKE_COLOR        = theme.getColor("ElementStroke");
 const STATUS_COLORS       = {
     Default: new Color(),
     Todo:    new Color(255, 0,   0),
@@ -64,8 +64,12 @@ class Task {
         this.position    = position || DEFAULT_POSITION;
         this.finished    =             DEFAULT_FINISHED;  
         this.id          = id       || Math.floor(Date.now() / ((Math.random() * 10000) + 500));
-        this.bgColor     = BACKGROUND_COLOR;
+        this.bgColor     = theme.getColor("ElementBg");
         // this.id          = id       || GenerateId();  
+
+        this.nameColor = theme.getColor("ElementTextPrimary")
+        this.nameColorStroke = this.nameColor.toInverted()
+        this.descColor = 
 
         //let menuBg = this.bgColor.getColor()
         //let menuStroke = STROKE_COLOR.getColor()
@@ -75,8 +79,8 @@ class Task {
             0, 
             100, 
             105,
-            this.bgColor.toP5Color(), 
-            STROKE_COLOR.toP5Color(), 
+            this.bgColor, 
+            STROKE_COLOR, 
             this
         );
     }
@@ -153,9 +157,9 @@ class Task {
         strokeWeight(3);
         stroke(STROKE_COLOR.getColor());
         push();
-        if (theme === "default") {
+        if (mode === "default") {
             fill(this.bgColor.getColor());
-        } else if (theme === "dark") {
+        } else if (mode === "dark") {
             fill(this.bgColor.toDarkMode().getColor());
         }
         rect(x, y, 380, 120, 10);
