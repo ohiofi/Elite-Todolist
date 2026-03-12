@@ -131,26 +131,25 @@ class Menu {
         this.moveTaskUpButton.position(pos.x + MENU_X_OFFSET + 7, pos.y + MENU_Y_OFFSET + 76);
         this.moveTaskDownButton.position(pos.x + MENU_X_OFFSET + 41, pos.y + MENU_Y_OFFSET + 76);
 
-        //show move task up/down buttons
-        this.markTaskDoneButton.show();
-        this.editTaskButton.show();
-        this.deleteTaskButton.show();
-        this.moveTaskUpButton.show();
-        this.moveTaskDownButton.show();
-
-        //menu buttons style.
-        this.markTaskDoneButton.style('z-index', '3');
-        this.editTaskButton.style('z-index', '3');
-        this.deleteTaskButton.style('z-index', '3');
-        this.moveTaskUpButton.style('z-index', '3');
-        this.moveTaskDownButton.style('z-index', '3');
-
-        //menu buttons position style.
-        this.markTaskDoneButton.style('position', 'absolute');
-        this.editTaskButton.style('position', 'absolute');
-        this.deleteTaskButton.style('position', 'absolute');
-        this.moveTaskUpButton.style('position', 'absolute');
-        this.moveTaskDownButton.style('position', 'absolute');
+        let buttons = [
+            this.markTaskDoneButton,
+            this.editTaskButton,
+            this.deleteTaskButton,
+            this.moveTaskUpButton,
+            this.moveTaskDownButton
+        ]
+        
+        let bgClr = theme.getColor("BackgroundTertiary")
+        let textClr = theme.getColor("TextSecondary")
+        let strokeClr = theme.getColor("StrokeSecondary")
+        for (let btn of buttons) {
+            btn.show()
+            btn.style('z-index', '3')
+            btn.style('position', 'absolute')
+            btn.style("background-color", bgClr.toHex()); 
+            btn.style("color", textClr.toHex()); 
+            btn.style("border", "2px solid" + strokeClr.toHex()); 
+        }
     }
 
     hideMenuButtons() {

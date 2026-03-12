@@ -40,7 +40,7 @@ class ArchiveList extends List {
 
         // title
         
-        textFont(TEXT_FONT);
+        textFont(theme.getFont());
         textAlign(CENTER, CENTER);
       
        

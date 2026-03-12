@@ -1,30 +1,31 @@
 class Theme {
-    constructor(lTextP, eTextP, eTextS, lS, eS, bg, lBg, eBg, font) { //ik how much i stress readability but i am NOT typing allat
+    constructor(tP, tS, tT, sP, sS, bP, bS, bT, font) { //ik how much i stress readability but i am NOT typing allat
         //text slop
-        this.TextPrimary         = lTextP || new Paint()
-        this.TextSecondary       = eTextP || new Paint()
-        this.TextTertiary        = eTextS || new Paint(200,200,200)
+        this.TextPrimary         = tP   || new Paint()
+        this.TextSecondary       = tS   || new Paint()
+        this.TextTertiary        = tT   || new Paint(200,200,200)
 
         //stroke
-        this.StrokePrimary       = lS     || new Paint(100, 230, 255)
-        this.StrokeSecondary     = eS     || new Paint(100, 230, 255)
+        this.StrokePrimary       = sP   || new Paint(100, 230, 255)
+        this.StrokeSecondary     = sS   || new Paint(100, 230, 255)
 
         //background
-        this.BackgroundPrimary   = bg     || new Paint(200,200,200)
-        this.BackgroundSecondary = lBg    || new Paint(255,255,255)
-        this.BackgroundTertiary  = eBg    || new Paint(58, 110, 165)
+        this.BackgroundPrimary   = bP   || new Paint(200,200,200)
+        this.BackgroundSecondary = bS   || new Paint(255,255,255)
+        this.BackgroundTertiary  = bT   || new Paint(58, 110, 165)
 
         //font
-        this.Font                = font   || "Arial"
+        this.Font                = font || "Arial"
     }
 
     getColor(colorName) {
-        let colorVal = this[colorName] //either a Color or a list of colors
+        let colorVal = this[colorName] //either a Paint or a list of paints
 
         if (colorVal instanceof Paint) {
             return colorVal
         }
 
+        //pick random if its a list
         let randInt = Math.floor(Math.random() * colorVal.length)
         console.log(randInt)
 
@@ -57,9 +58,10 @@ class Theme {
     grayscaleAll() {
         for(let colorName in this) {
             let colorVal = this[colorName]
+            console.log(colorVal)
             let oldColor = colorVal.toGrayscale()
 
-            this.colorName = oldColor
+            this[colorName] = oldColor
         }
     }
 
@@ -156,11 +158,24 @@ const PresetThemes = {
         new Paint(11, 101, 11),  //BackgroundSecondary
         new Paint(0, 0, 0),      //BackgroundTertiary
         "Arial"                  //Font
-    )
+    ),
+    UltraGreen: new Theme(
+        new Paint(0, 114, 0),   //TextPrimary
+        new Paint(0, 100, 0),   //TextSecondary
+        new Paint(0, 75, 35),   //TextTertiary
+        new Paint(56, 176, 0),  //StrokePrimary
+        new Paint(0, 128, 0),   //StrokeSecondary
+        new Paint(204, 255, 51),//BackgroundPrimary
+        new Paint(158, 240, 26),//BackgroundSecondary
+        new Paint(112, 224, 0), //BackgroundTertiary
+        "Arial",                //Font
+    ),
 }
 
 function getPresetTheme(presetName) {
-    return PresetThemes[presetName] || PresetThemes["Default"]
+    let presetTheme = PresetThemes[presetName] || PresetThemes["Default"]
+    //presetTheme = presetTheme.invertAll()
+    return presetTheme
 }
 
-let theme = getPresetTheme("Default") //do not remove, this line is the nail which holds this whole building together (AKA coconut (how many references can i add to this comment))
+let theme = getPresetTheme("1x1x1x1") //do not remove, this line is the nail which holds this whole building together (AKA coconut (how many references can i add to this comment))

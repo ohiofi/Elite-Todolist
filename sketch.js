@@ -25,21 +25,6 @@ function setup() {
     }
     i++;
   }
-
-
-  // let list0 = new List("Groceries");
-  // list0.addTask(new Task("Apples", "Get 2 Honeycrisp apples"));
-  // list0.addTask(new Task("Bananas", "3 or 4 green bananas"));
-  // listArray.push(list0);  
-
-  // let list1 = new List("Movies To Watch");
-  // list1.addTask(new Task("Marty Supreme", "About table tennis?"));
-  // list1.addTask(new Task("The Muppet Show", "Seth Rogan is in it"));
-  // list1.addTask(new Task("F1", "Cars go vroom"));
-  // listArray.push(list1);  
-
-
-  //initList();
 }
 
 function draw() {
@@ -112,14 +97,13 @@ function getNewList(){
 }
 
 function styleButton(btn) {
-  if (mode === "default") {
-    btn.style("background-color", "#ffffff"); 
-    btn.style("color", "#000000"); 
-  } else if (mode === "dark") {
-    btn.style("background-color", "#000000"); 
-    btn.style("color", "#ffffff"); 
-  }      
-  btn.style("border", "2px solid #64e6ff"); 
+  let bgClr = theme.getColor("BackgroundTertiary")
+  let textClr = theme.getColor("TextSecondary")
+  let strokeClr = theme.getColor("StrokeSecondary")
+
+  btn.style("background-color", bgClr.toHex()); 
+  btn.style("color", textClr.toHex()); 
+  btn.style("border", "2px solid" + strokeClr.toHex()); 
   btn.style("padding", "8px 16px");
   btn.style("border-radius", "6px");
   btn.style("font-size", "14px");
