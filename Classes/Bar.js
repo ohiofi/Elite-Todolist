@@ -10,9 +10,9 @@ class Bar{
         this.addListButton.hide();
         this.addListButton.mousePressed(() => this.buttonPressedMakeList());
 
-        this.addDarkModeButton = createButton(`Toggle Dark Mode`);
-        this.addDarkModeButton.hide();
-        this.addDarkModeButton.mousePressed(() => this.buttonPressedToggleDarkMode());
+        // this.addDarkModeButton = createButton(`Toggle Dark Mode`);
+        // this.addDarkModeButton.hide();
+        // this.addDarkModeButton.mousePressed(() => this.buttonPressedToggleDarkMode());
 
         this.ChangeThemeButton = createButton(`Change Theme`);
         this.ChangeThemeButton.hide();
@@ -35,13 +35,13 @@ class Bar{
         saveAllLists();
     }
 
-    buttonPressedToggleDarkMode(){
-        if (mode != "default") {
-            mode = "default";
-        } else {
-            mode = "dark";
-        }
-    }
+    // buttonPressedToggleDarkMode(){
+    //     if (mode != "default") {
+    //         mode = "default";
+    //     } else {
+    //         mode = "dark";
+    //     }
+    // }
 
     buttonPressedChangeTheme() {
         let themeName = prompt("Theme name:", "Default")
@@ -73,23 +73,23 @@ class Bar{
         let xOffset = 40;
         let yOffset = this.height/4;
         this.addListButton.position(this.x + xOffset, this.y + yOffset);
-        this.addDarkModeButton.position(this.width - xOffset * 4.5, this.y + yOffset);
-        this.ChangeThemeButton.position(this.width - xOffset * 8, this.y + yOffset);
+        // this.addDarkModeButton.position(this.width - xOffset * 4.5, this.y + yOffset);
+        this.ChangeThemeButton.position(this.width - xOffset * 4.5, this.y + yOffset);
 
         this.addListButton.style("padding", "12px 20px"); 
         this.addListButton.style("font-size", "20px"); 
-        this.addDarkModeButton.style("padding", "12px 20px"); 
-        this.addDarkModeButton.style("font-size", "20px"); 
+        // this.addDarkModeButton.style("padding", "12px 20px"); 
+        // this.addDarkModeButton.style("font-size", "20px"); 
         this.ChangeThemeButton.style("padding", "12px 20px"); 
         this.ChangeThemeButton.style("font-size", "20px"); 
 
         styleButton(this.addListButton);
-        styleButton(this.addDarkModeButton);
+        // styleButton(this.addDarkModeButton);
         styleButton(this.ChangeThemeButton);
 
         //shows buttons
         this.addListButton.show();
-        this.addDarkModeButton.show();
+        // this.addDarkModeButton.show();
         this.ChangeThemeButton.show();
     }
     

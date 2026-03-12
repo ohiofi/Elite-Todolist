@@ -157,6 +157,15 @@ class Task {
         // sets pos of buttons        
         menu.menuButton.position(x + 345, y + 7);
 
+        //styles the menu button
+        let buttonBg = theme.getColor("BackgroundSecondary")
+        let buttonText = theme.getColor("TextPrimary")
+        let buttonStroke = theme.getColor("StrokePrimary")
+
+        menu.menuButton.style("background-color", buttonBg.toHex()); 
+        menu.menuButton.style("color", buttonText.toHex()); 
+        menu.menuButton.style("border", "2px solid" + buttonStroke.toHex()); 
+
         //show move task up/down buttons
         menu.menuButton.show();
 

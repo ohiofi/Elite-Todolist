@@ -114,11 +114,11 @@ class Menu {
         this.mainBox.style(`height: ${[this.height]}px`);
         this.mainBox.style("z-index: 2");
         if (mode === "default") {
-            this.mainBox.style(`background-color: ${[color(bgColor.getColor()[0], bgColor.getColor()[1], bgColor.getColor()[2])]}`);
-            this.mainBox.style(`border: 3px solid ${[color(borderColor.getColor()[0], borderColor.getColor()[1], borderColor.getColor()[2])]}`);
+            this.mainBox.style(`background-color: ${bgColor.toHex()}`);
+            this.mainBox.style(`border: 3px solid ${borderColor.toHex()}`);
         } else if (mode === "dark") {
-            this.mainBox.style(`background-color: ${[color(bgColor.toDarkMode().getColor()[0], bgColor.toDarkMode().getColor()[1], bgColor.toDarkMode().getColor()[2])]}`);
-            this.mainBox.style(`border: 3px solid ${[color(borderColor.getColor()[0], borderColor.getColor()[1], borderColor.getColor()[2])]}`);
+            this.mainBox.style(`background-color: ${bgColor.toDarkMode().toHex()}`);
+            this.mainBox.style(`border: 3px solid ${borderColor.toHex()}`);
         }
 
         this.mainBox.style(`border-radius: 10px`);
@@ -139,9 +139,9 @@ class Menu {
             this.moveTaskDownButton
         ]
         
-        let bgClr = theme.getColor("BackgroundTertiary")
-        let textClr = theme.getColor("TextSecondary")
-        let strokeClr = theme.getColor("StrokeSecondary")
+        let bgClr = theme.getColor("BackgroundSecondary")
+        let textClr = theme.getColor("TextPrimary")
+        let strokeClr = theme.getColor("StrokePrimary")
         for (let btn of buttons) {
             btn.show()
             btn.style('z-index', '3')
@@ -163,28 +163,23 @@ class Menu {
 
     editTask() {
         let editName = prompt("Input new task name:", this.parent.name);
-        switch (editName) {
-            case null:
-                return;
-                break;
 
-            default:
-                this.parent.name = editName;
-                saveAllLists();
+        if (!editName) {
+            return
         }
 
+        this.parent.name = editName;
+        
         let editDesc = prompt("Input new task description:", this.parent.description);
-        switch (editDesc) {
-            case null:
-                saveAllLists();
-                return;
-                break;
-
-            default:
-                this.parent.description = editDesc;
-                saveAllLists();
+        
+        if (!editDesc) {
+            saveAllLists();
+            return
         }
 
+        this.parent.description = editDesc;
+        saveAllLists();
+        
         hideAllMenus();
     }
 

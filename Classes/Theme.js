@@ -141,8 +141,8 @@ const PresetThemes = {
         new Paint(70, 143, 175),//TextPrimary
         new Paint(),            //TextSecondary
         new Paint(100,100,100), //TextTertiary
-        new Paint(97, 165, 194),//StrokePrimary
-        new Paint(),            //StrokeSecondary
+        new Paint(),            //StrokePrimary
+        new Paint(97, 165, 194),//StrokeSecondary
         new Paint(1, 58, 99),   //BackgroundPrimary
         new Paint(1, 42, 74),   //BackgroundSecondary
         new Paint(1, 73, 124),  //BackgroundTertiary
