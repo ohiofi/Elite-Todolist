@@ -25,6 +25,10 @@ function setup() {
     }
     i++;
   }
+  let savedTheme = localStorage.getItem("Theme")
+  if (savedTheme) {
+    theme = getPresetTheme(savedTheme)
+  }
 }
 
 function draw() {

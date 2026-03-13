@@ -19,9 +19,6 @@ const DESC_SIZE           = 16;
 const STATUS_SIZE         = 16;
 
 //colors, lots of colors
-//const BACKGROUND_COLOR    = 
-const DEFAULT_WHITE       = new Paint(255);
-
 const STATUS_COLORS       = {
     Default: new Paint(),
     Todo:    new Paint(255, 0,   0),
@@ -101,7 +98,6 @@ class Task {
         this.setStatus(TASK_STATES.DELETED);
     }
     
-
     //methods
     toString() {
         let output = "";
@@ -129,6 +125,10 @@ class Task {
     }
   
     show(x, y) {
+        let ctx = drawingContext
+        ctx.shadowColor = theme.getColor("Glow").toHex();
+        ctx.shadowBlur = 7.5;
+
         let strokeColor = theme.getColor("StrokeSecondary")
         let nameColor = theme.getColor("TextSecondary")
         let descColor = theme.getColor("TextTertiary")
@@ -153,6 +153,8 @@ class Task {
         }
         rect(x, y, 380, 120, 10);
         pop();
+
+        ctx.shadowBlur = 0;
 
         // sets pos of buttons        
         menu.menuButton.position(x + 345, y + 7);
@@ -187,9 +189,6 @@ class Task {
         fill(STATUS_COLORS[this.status].getColor() || STATUS_COLORS["Default"].getColor());
         textSize(STATUS_SIZE);
         text(this.status, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING * 3);
-
-        fill(DEFAULT_WHITE.getColor());
-        //strokeWeight(1);
 
         menu.show();
     }

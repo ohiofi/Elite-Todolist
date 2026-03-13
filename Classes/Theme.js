@@ -1,5 +1,5 @@
 class Theme {
-    constructor(tP, tS, tT, sP, sS, bP, bS, bT, font) { //ik how much i stress readability but i am NOT typing allat
+    constructor(tP, tS, tT, sP, sS, bP, bS, bT, g, font) { //ik how much i stress readability but i am NOT typing allat
         //text slop
         this.TextPrimary         = tP   || new Paint()
         this.TextSecondary       = tS   || new Paint()
@@ -13,6 +13,9 @@ class Theme {
         this.BackgroundPrimary   = bP   || new Paint(200,200,200)
         this.BackgroundSecondary = bS   || new Paint(255,255,255)
         this.BackgroundTertiary  = bT   || new Paint(58, 110, 165)
+
+        //glow/shadow
+        this.Glow = g                   || new Paint(0,0,0)
 
         //font
         this.Font                = font || "Arial"
@@ -78,6 +81,7 @@ const PresetThemes = {
         new Paint(200,200,200),  //BackgroundPrimary
         new Paint(255,255,255),  //BackgroundSecondary
         new Paint(58, 110, 165), //BackgroundTertiary
+        new Paint(0, 0, 0),       //Glow
         "Arial"                  //Font
     ),
     Classic: new Theme(
@@ -101,6 +105,7 @@ const PresetThemes = {
             // new Paint(58, 90, 64), 
             // new Paint(52, 78, 65)
         ],
+        new Paint(0, 0, 0),      //Glow
         "Courier New"            //Font
     ),
     Sakura: new Theme(
@@ -112,6 +117,7 @@ const PresetThemes = {
         new Paint(255, 194, 209),//BackgroundPrimary
         new Paint(82, 53, 25),   //BackgroundSecondary
         new Paint(255, 229, 236),//BackgroundTertiary
+        new Paint(0, 0, 0),       //Glow
         "Arial"                  //Font
     ),
     //TODO: MY DELICATE RETINAS!!!! THEY BURN!!!!!
@@ -124,6 +130,7 @@ const PresetThemes = {
         new Paint(255, 255, 255),//BackgroundPrimary
         new Paint(255, 117, 239),//BackgroundSecondary
         new Paint(255, 255, 255),//BackgroundTertiary
+        new Paint(255, 0, 255),  //Glow
         "Arial"                  //Font
     ),
     V1sDream: new Theme(
@@ -135,6 +142,7 @@ const PresetThemes = {
         new Paint(110, 20, 35),//BackgroundPrimary
         new Paint(199, 31, 55),//BackgroundSecondary
         new Paint(100, 18, 32),//BackgroundTertiary
+        new Paint(255, 0, 0),  //Glow
         "Arial",               //Font
     ),
     DeepBlue: new Theme(
@@ -146,6 +154,7 @@ const PresetThemes = {
         new Paint(1, 58, 99),   //BackgroundPrimary
         new Paint(1, 42, 74),   //BackgroundSecondary
         new Paint(1, 73, 124),  //BackgroundTertiary
+        new Paint(0, 0, 0),     //Glow
         "Arial",                //Font
     ),
     "1x1x1x1": new Theme(
@@ -157,6 +166,7 @@ const PresetThemes = {
         new Paint(),             //BackgroundPrimary
         new Paint(11, 101, 11),  //BackgroundSecondary
         new Paint(0, 0, 0),      //BackgroundTertiary
+        new Paint(0, 255, 0),    //Glow
         "Arial"                  //Font
     ),
     UltraGreen: new Theme(
@@ -168,6 +178,7 @@ const PresetThemes = {
         new Paint(204, 255, 51),//BackgroundPrimary
         new Paint(158, 240, 26),//BackgroundSecondary
         new Paint(112, 224, 0), //BackgroundTertiary
+        new Paint(0, 255, 0),     //Glow
         "Arial",                //Font
     ),
 }
@@ -178,4 +189,4 @@ function getPresetTheme(presetName) {
     return presetTheme
 }
 
-let theme = getPresetTheme("1x1x1x1") //do not remove, this line is the nail which holds this whole building together (AKA coconut (how many references can i add to this comment))
+let theme = getPresetTheme("Default") //do not remove, this line is the nail which holds this whole building together (AKA coconut (how many references can i add to this comment))

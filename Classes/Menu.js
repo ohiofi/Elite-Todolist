@@ -64,6 +64,10 @@ class Menu {
     }
 
     buttonPressedDelete() {
+        if (!confirm(`Delete ${this.parent.getName()}?`)) {
+            return
+        }
+
         let list = this.getListTask();
         this.deleteTaskButtons();
         list.removeTask(this.parent);

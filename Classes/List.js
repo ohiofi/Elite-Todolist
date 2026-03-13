@@ -141,9 +141,16 @@ class List {
     }
 
     buttonPressedDeleteList(){
+        if (!confirm(`Delete ${this.getName()}?`)) {
+            return
+        }
+
+        let savedTheme = localStorage.getItem("Theme")
         this.deleteListButtons();
         this.deleteTaskButtons();
-        localStorage.clear();
+        localStorage.clear(); //dude... why
+        
+        localStorage.setItem("Theme", savedTheme)
         listArray.splice(listArray.indexOf(this), listArray.indexOf(this) >= 0 ? 1 : 0);
         hideAllMenus()
         refresh();
@@ -213,6 +220,10 @@ class List {
     }
 
     show(x) {
+        let ctx = drawingContext
+        ctx.shadowColor = theme.getColor("Glow").toHex();
+        ctx.shadowBlur = 10;
+
         let borderColor = theme.getColor("StrokePrimary")
         let backgroundColor = theme.getColor("BackgroundSecondary")
         let titleColor = theme.getColor("TextPrimary")
@@ -230,9 +241,10 @@ class List {
         strokeWeight(5);
         let verticalOffsetTop = 100;
         let verticalOffsetBottom = 125;
-
+        
         rect(x, verticalOffsetTop, 400, windowHeight - verticalOffsetBottom, 15);
-
+        ctx.shadowBlur = 0;
+        
         //sets pos of buttons
         this.addTaskButton.position(x + 10, verticalOffsetTop + 10);
         this.deleteListButton.position(x + 290, verticalOffsetTop + 10);

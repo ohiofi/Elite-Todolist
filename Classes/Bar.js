@@ -51,9 +51,14 @@ class Bar{
         }
 
         theme = getPresetTheme(themeName)
+        localStorage.setItem("Theme", themeName)
     }
 
     show(){
+        let ctx = drawingContext
+        ctx.shadowColor = theme.getColor("Glow").toHex();
+        ctx.shadowBlur = 10;
+
         strokeWeight(5)
 
         let bgColor = theme.getColor("BackgroundSecondary");
@@ -68,6 +73,7 @@ class Bar{
         }
         
         rect(this.x, this.y, this.width, this.height, this.cornerCouverture);
+        ctx.shadowBlur = 0
         
         //sets pos of buttons
         let xOffset = 40;
