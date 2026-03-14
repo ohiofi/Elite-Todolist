@@ -10,8 +10,6 @@ class List {
             0, 
             100, 
             105,
-            color(255,255,255), 
-            color(0,0,0), 
             this
         );
         this.titleColor = theme.getColor("TextPrimary")
@@ -183,6 +181,8 @@ class List {
     }
 
     show(x) {
+        this.x = x; // this is necessary for the List's menu
+        
         let ctx = drawingContext
         ctx.shadowColor = theme.getColor("Glow").toHex();
         ctx.shadowOffsetX = 0.7;

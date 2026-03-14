@@ -7,13 +7,13 @@ const LIST_MENU_Y_OFFSET = 105;
 
 class Menu {
 
-    constructor(x, y, width, height, bgColor, borderColor, parent) {
+    constructor(x, y, width, height, parent) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.bgColor = bgColor;
-        this.borderColor = borderColor;
+        this.bgColor = 0;
+        this.borderColor = 0;
         this.parent = parent;
 
         //task buttons
@@ -64,17 +64,14 @@ class Menu {
 
     buttonPressedMarkDone() {
         this.parent.setCompleted();
-        this.parent.setCompleted();
         let list = this.getListTask();
         for (let i = 0; i < listArray.length; i++) {
             if (listArray[i].getName() === "Archive") {
-                list.moveTask(listArray[i], this.parent);
                 list.moveTask(listArray[i], this.parent);
                 break;
             }
             if (i === listArray.length - 1) {
                 listArray.push(new ArchiveList("Archive"));
-                list.moveTask(listArray[i + 1], this.parent);
                 list.moveTask(listArray[i + 1], this.parent);
                 break;
             }
@@ -141,7 +138,6 @@ class Menu {
         let list = this.getListTask();
         this.deleteTaskButtons();
         list.removeTask(this.parent);
-        list.removeTask(this.parent);
         list.setTasksPositions();
         this.deleteMenu();
         hideAllMenus();
@@ -152,7 +148,7 @@ class Menu {
     closeMenu() {
         if(this.parent instanceof Task){
             this.taskMenuOpen = false;
-            this.hideTaskMenuButtons();
+            this.hideMenuButtons();
             return;
         }else if(this.parent instanceof List){
             this.listMenuOpen = false;
@@ -252,16 +248,23 @@ class Menu {
         if (!this.listMenuOpen) {
             return;
         }
-
-        const pos = { x: this.parent.x, y: this.y };
+        let bgColor = theme.getColor("BackgroundTertiary")
+        let borderColor = theme.getColor("StrokeSecondary")
+        const pos = { x: this.x, y: this.y };
 
         // main box
-        this.mainBox.position(pos.x + LIST_MENU_X_OFFSET, pos.y + LIST_MENU_Y_OFFSET);
+        this.mainBox.position(this.x + LIST_MENU_X_OFFSET, this.y + LIST_MENU_Y_OFFSET);
         this.mainBox.style(`width: ${[this.width]}px`);
         this.mainBox.style(`height: ${[this.height]}px`);
         this.mainBox.style("z-index: 2");
-        this.mainBox.style(`background-color: ${[this.bgColor]}`);
-        this.mainBox.style(`border: 5px solid ${[this.borderColor]}`);
+        if (mode === "default") {
+            this.mainBox.style(`background-color: ${bgColor.toHex()}`);
+            this.mainBox.style(`border: 3px solid ${borderColor.toHex()}`);
+        } else if (mode === "dark") {
+            this.mainBox.style(`background-color: ${bgColor.toDarkMode().toHex()}`);
+            this.mainBox.style(`border: 3px solid ${borderColor.toHex()}`);
+        }
+
         this.mainBox.style(`border-radius: 10px`);
         this.mainBox.show();
 
@@ -356,8 +359,7 @@ class Menu {
     slidePosition(direction) {
         let list = this.getListTask();
         // console.log(list);
-        let taskIndex = this.parent.position
-        let taskIndex = this.parent.position
+        let taskIndex = this.parent.position;
 
         if (direction == 0) { //avoids dividing by zero and other stuff that will break the app
             return;

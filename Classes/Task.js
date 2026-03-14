@@ -62,8 +62,6 @@ class Task {
             0, 
             100, 
             105,
-            this.bgColor, 
-            STROKE_COLOR, 
             this
         );
     }
@@ -209,7 +207,7 @@ class Task {
         textSize(STATUS_SIZE);
         text(this.status, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING * 3);
 
-        fill(DEFAULT_WHITE.getColor());
+        //fill(DEFAULT_WHITE.getColor());
         //strokeWeight(1);
 
         this.menu.showTaskMenu();
