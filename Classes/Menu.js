@@ -250,10 +250,10 @@ class Menu {
         }
         let bgColor = theme.getColor("BackgroundTertiary")
         let borderColor = theme.getColor("StrokeSecondary")
-        const pos = { x: this.x, y: this.y };
+        const pos = { x: this.parent.x, y: this.y };
 
         // main box
-        this.mainBox.position(this.x + LIST_MENU_X_OFFSET, this.y + LIST_MENU_Y_OFFSET);
+        this.mainBox.position(pos.x + LIST_MENU_X_OFFSET, pos.y + LIST_MENU_Y_OFFSET);
         this.mainBox.style(`width: ${[this.width]}px`);
         this.mainBox.style(`height: ${[this.height]}px`);
         this.mainBox.style("z-index: 2");
