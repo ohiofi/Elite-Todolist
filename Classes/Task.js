@@ -182,7 +182,7 @@ class Task {
         if (theme.getData("HighlightEnabled")) {
             console.log(theme.getData("HighlightEnabled"))
             let highlightColor = theme.getPaint("HighlightColor")
-            let highlightOpacity = 22; // scale of 0-100
+            let highlightOpacity = theme.getData("HighlightOpacity"); // scale of 0-100
             textSize(NAME_SIZE);
             let highlightMargin = 5;
             let highlightWidth = 380 - highlightMargin * 2;

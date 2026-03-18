@@ -85,6 +85,20 @@ const PresetThemes = {
         GlowEnabled: true,
         HighlightEnabled: true
     }),
+    DarkMode: new Theme({
+        TextPrimary: new Paint(200,200,200),
+        TextSecondary: new Paint(200,200,200),
+        TextTertiary: new Paint(225,225,225),
+        BackgroundPrimary: new Paint(25,25,25),
+        BackgroundSecondary: new Paint(50,50,50),
+        BackgroundTertiary: new Paint(8, 60, 105),
+        StrokePrimary: new Paint(25, 155, 180),
+        StrokeSecondary: new Paint(25, 155, 180),
+        GlowEnabled: true,
+        HighlightColor: new Paint(),
+        HighlightOpacity: 44,
+        HighlightEnabled: true
+    }),
     Classic: new Theme({
         BackgroundTertiary: [
             new Paint(58, 110, 165), 
@@ -142,6 +156,7 @@ const PresetThemes = {
         HighlightColor: new Paint(255,0,0),
         GlowIntensity: 5,
         GlowEnabled: true,
+        HighlightOpacity: 60,
         HighlightEnabled: true
     }),
     DeepBlue: new Theme({
@@ -194,6 +209,32 @@ const PresetThemes = {
         BackgroundTertiary: new Paint(0,0,0),
         GlowEnabled: false,
         HighlightEnabled: false
+    }),
+    HackerMan: new Theme({
+        TextPrimary: new Paint(0,255,0),
+        TextSecondary: new Paint(0,255,0),
+        TextTertiary: new Paint(0,255,0),
+        StrokePrimary: new Paint(0,255,0),
+        StrokeSecondary: new Paint(0,255,0),
+        BackgroundPrimary: new Paint(0,0,0),
+        BackgroundSecondary: new Paint(0,0,0),
+        BackgroundTertiary: new Paint(0,0,0),
+        Glow: new Paint(0,255,0),
+        GlowIntensity: 10,
+        GlowEnabled: true,
+        HighlightEnabled: false
+    }),
+    Noob: new Theme({
+        TextPrimary: new Paint(0,0,0),
+        TextSecondary: new Paint(0,0,0),
+        TextTertiary: new Paint(0,0,0),
+        StrokePrimary: new Paint(0,0,0),
+        StrokeSecondary: new Paint(0,0,0),
+        BackgroundPrimary: new Paint(255, 225, 0),
+        BackgroundSecondary: new Paint(0, 157, 255),
+        BackgroundTertiary: new Paint(13, 133, 0),
+        GlowEnabled: true,
+        HighlightEnabled: true
     })
 }
 
