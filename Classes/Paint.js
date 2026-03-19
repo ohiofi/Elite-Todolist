@@ -3,14 +3,9 @@ const DEFAULT_RED        = 0
 const DEFAULT_GREEN      = 0
 const DEFAULT_BLUE       = 0
 
-const HEX_VALUES = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F"
-]
+const HEX_DIGITS = 16; //switch this to break everything
+
+const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 class Paint {
     //supports a single argument better c:
@@ -25,8 +20,33 @@ class Paint {
     setBlue(newBlue)   { this.B = newBlue  || DEFAULT_BLUE }
 
     //instead of passing in numbers for the color() thing pass this in (yes this is tested and works)
-    getColor() {
+    getRGB() {
         return [this.R, this.G, this.B];
+    }
+    
+    //just in case...
+    getHex() {
+        let hexString = "#" //remove # if its not needed
+
+        for (let rgb of this.getRGB()) { //gets all 3 values
+            for (let i = 1; i <= 2; i ++) {
+                let hexVal
+                if (i % 2 == 1) {
+                    hexVal = Math.floor(rgb / HEX_DIGITS)
+                } else {
+                    hexVal = rgb % HEX_DIGITS
+                }
+
+                if (hexVal > 9) {
+                    hexVal -= 10
+                    hexVal = ALPHABET.substring(hexVal, hexVal + 1)
+                }
+
+                hexString += hexVal + ""
+            }
+        }
+        
+        return hexString
     }
 
     toSaveString() {
@@ -93,7 +113,7 @@ class Paint {
        
         let colorVals = []
         
-        for (let colorVal of this.getColor()) {
+        for (let colorVal of this.getRGB()) {
           // console.log(Math.sqrt(colorVal))
           let newVal = Math.abs(colorVal + colorDiff)
           
@@ -103,35 +123,7 @@ class Paint {
         return new Paint(colorVals[0], colorVals[1], colorVals[2])
     }
 
-    //just in case...
-    toHex() {
-        let hexString = "#" //remove # if its not needed
-
-        for (let rgb of this.getColor()) { //gets all 3 values
-            let val1 = Math.floor(rgb / 16)
-            let val2 = rgb % 16
-
-            if (val1 > 9) {
-                val1 = HEX_VALUES[val1 - 10]
-            }
-            if (val2 > 9) {
-                val2 = HEX_VALUES[val2 - 10]
-            }
-
-            hexString += val1 + ""
-            hexString += val2 + ""
-        }
-        
-        return hexString
-    }
-
-    //no clue why anyone would use p5 colors over this but whatever (transparency or something?)
-    toP5Color() {
-        return color(this.R, this.G, this.B)
-    }
 }
-
-
 
 function parseColor(colorString) {
     if (!colorString) {

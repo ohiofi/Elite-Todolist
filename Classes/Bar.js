@@ -56,22 +56,24 @@ class Bar{
 
     show(){
         let ctx = drawingContext
-        ctx.shadowColor = theme.getColor("Glow").toHex();
-        ctx.shadowOffsetX = 0.7;
-        ctx.shadowOffsetY = 0.7;
-        ctx.shadowBlur = 1;
+        if (theme.getData("GlowEnabled")) {
+            ctx.shadowColor = theme.getPaint("Glow").getHex();
+            ctx.shadowOffsetX = 0.7;
+            ctx.shadowOffsetY = 0.7;
+            ctx.shadowBlur = 1 * theme.getData("GlowIntensity");
+        }
 
         strokeWeight(5)
 
-        let bgColor = theme.getColor("BackgroundSecondary");
-        let borderColor = theme.getColor("StrokePrimary")
+        let bgColor = theme.getPaint("BackgroundSecondary");
+        let borderColor = theme.getPaint("StrokePrimary")
         
         if (mode === "default") {
-            stroke(borderColor.getColor());
-            fill(bgColor.getColor());
+            stroke(borderColor.getRGB());
+            fill(bgColor.getRGB());
         } else if (mode === "dark") {
-            stroke(borderColor.toDarkMode().getColor());
-            fill(bgColor.toDarkMode().getColor());
+            stroke(borderColor.toDarkMode().getRGB());
+            fill(bgColor.toDarkMode().getRGB());
         }
         
         rect(this.x, this.y, this.width, this.height, this.cornerCouverture);

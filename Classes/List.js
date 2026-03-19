@@ -6,15 +6,16 @@ class List {
         this.listStorage = [];
 
         this.menu = new Menu(
-            0,
-            0, 
+            30,
+            105, 
             100, 
             105,
             this
         );
-        this.titleColor = theme.getColor("TextPrimary")
-        this.backgroundColor = theme.getColor("BackgroundSecondary")
-        this.borderColor = theme.getColor("StrokePrimary")
+        
+        this.titleColor = theme.getPaint("TextPrimary")
+        this.backgroundColor = theme.getPaint("BackgroundSecondary")
+        this.borderColor = theme.getPaint("StrokePrimary")
     }
 
     //Getters
@@ -184,23 +185,25 @@ class List {
         this.x = x; // this is necessary for the List's menu
         
         let ctx = drawingContext
-        ctx.shadowColor = theme.getColor("Glow").toHex();
-        ctx.shadowOffsetX = 0.7;
-        ctx.shadowOffsetY = 0.7;
-        ctx.shadowBlur = 1;
+        if (theme.getData("GlowEnabled")) {
+            ctx.shadowColor = theme.getPaint("Glow").getHex();
+            ctx.shadowOffsetX = 0.7;
+            ctx.shadowOffsetY = 0.7;
+            ctx.shadowBlur = 1 * theme.getData("GlowIntensity");
+        }
 
-        let borderColor = theme.getColor("StrokePrimary")
-        let backgroundColor = theme.getColor("BackgroundSecondary")
-        let titleColor = theme.getColor("TextPrimary")
+        let borderColor = theme.getPaint("StrokePrimary")
+        let backgroundColor = theme.getPaint("BackgroundSecondary")
+        let titleColor = theme.getPaint("TextPrimary")
 
         if (mode === "default") {
-            stroke(borderColor.getColor());
-            fill(backgroundColor.getColor());
+            stroke(borderColor.getRGB());
+            fill(backgroundColor.getRGB());
         } else if (mode === "dark") {
             let evilmodeColor = backgroundColor.toDarkMode()
             let evilBorderColor = borderColor.toDarkMode()
-            stroke(evilBorderColor.getColor());
-            fill(evilmodeColor.getColor());
+            stroke(evilBorderColor.getRGB());
+            fill(evilmodeColor.getRGB());
         }
         // box
         strokeWeight(5);
@@ -212,28 +215,39 @@ class List {
         ctx.shadowOffsetY = 0;
         ctx.shadowBlur = 0;
 
+        this.menu.x = x + 30
+
         //sets pos of buttons
         this.menu.menuButton.position(x + 370,verticalOffsetBottom - 17);
+
+        //styles the menu button
+        let buttonBg = theme.getPaint("BackgroundSecondary")
+        let buttonText = theme.getPaint("TextPrimary")
+        let buttonStroke = theme.getPaint("StrokePrimary")
+
+        this.menu.menuButton.style("background-color", buttonBg.getHex()); 
+        this.menu.menuButton.style("color", buttonText.getHex()); 
+        this.menu.menuButton.style("border", "2px solid" + buttonStroke.getHex()); 
 
         //show move task up/down buttons
         this.menu.menuButton.show();
 
         // title
         strokeWeight(0)
-        textFont(theme.getFont());
+        textFont(theme.getData("Font"));
         textAlign(CENTER, CENTER);
         if (mode === "default") {
             strokeWeight(0);
-            fill(titleColor.getColor());
+            fill(titleColor.getRGB());
         } else if (mode === "dark") {
             let evilTitleColor = titleColor.toDarkMode()
             strokeWeight(3);
-            fill(evilTitleColor.getColor());
+            fill(evilTitleColor.getRGB());
         }
         textSize(24);
         
         text(this.name, x + 200, verticalOffsetTop + 20);
-        // fill(this.backgroundColor.getColor());
+        // fill(this.backgroundColor.getRGB());
         textSize(12);
         strokeWeight(1);
 
@@ -243,7 +257,7 @@ class List {
             this.showTasks(x)
         }
 
-        this.menu.showListMenu();
+        this.menu.showMenu();
     }
 
     showTasks(x) {

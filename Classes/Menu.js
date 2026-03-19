@@ -6,7 +6,6 @@ const LIST_MENU_X_OFFSET = 395;
 const LIST_MENU_Y_OFFSET = 105;
 
 class Menu {
-
     constructor(x, y, width, height, parent) {
         this.x = x;
         this.y = y;
@@ -17,45 +16,61 @@ class Menu {
         this.parent = parent;
 
         //task buttons
-        this.markTaskDoneButton = createButton(`Mark Done`);
-        this.markTaskDoneButton.hide();
-        this.markTaskDoneButton.mousePressed(() => this.buttonPressedMarkDone());
+        if (parent instanceof Task) {
+            this.markTaskDoneButton = createButton(`Mark Done`);
+            this.markTaskDoneButton.hide();
+            this.markTaskDoneButton.mousePressed(() => this.buttonPressedMarkDone());
 
-        this.deleteTaskButton = createButton(`Delete Task`);
-        this.deleteTaskButton.hide();
-        this.deleteTaskButton.mousePressed(() => this.buttonPressedDelete());
+            this.deleteTaskButton = createButton(`Delete Task`);
+            this.deleteTaskButton.hide();
+            this.deleteTaskButton.mousePressed(() => this.buttonPressedDelete());
 
-        this.editTaskButton = createButton(`Edit Task`);
-        this.editTaskButton.hide();
-        this.editTaskButton.mousePressed(() => this.editTask());
+            this.editTaskButton = createButton(`Edit Task`);
+            this.editTaskButton.hide();
+            this.editTaskButton.mousePressed(() => this.editTask());
 
-        this.moveTaskUpButton = createButton(`⬆️`);
-        this.moveTaskUpButton.hide();
-        this.moveTaskUpButton.mousePressed(() => this.slidePosition(1));
+            this.moveTaskUpButton = createButton(`⬆️`);
+            this.moveTaskUpButton.hide();
+            this.moveTaskUpButton.mousePressed(() => this.slidePosition(1));
 
-        this.moveTaskDownButton = createButton(`⬇️`);
-        this.moveTaskDownButton.hide();
-        this.moveTaskDownButton.mousePressed(() => this.slidePosition(-1));
+            this.moveTaskDownButton = createButton(`⬇️`);
+            this.moveTaskDownButton.hide();
+            this.moveTaskDownButton.mousePressed(() => this.slidePosition(-1));
 
+            this.buttons = [
+                this.markTaskDoneButton,
+                this.editTaskButton,
+                this.deleteTaskButton,
+                this.moveTaskUpButton,
+                this.moveTaskDownButton
+            ]
+        }
+        else if (parent instanceof List) {
+            //list buttons
+            this.addTaskButton = createButton(`Add Task`);
+            this.addTaskButton.hide();
+            this.addTaskButton.mousePressed(() => this.buttonPressedAddTask());
+            
+            this.deleteListButton = createButton(`Delete List`);
+            this.deleteListButton.hide();
+            this.deleteListButton.mousePressed(() => this.buttonPressedDeleteList());
+            
+            this.editListButton = createButton(`Edit List`);
+            this.editListButton.hide();
+            this.editListButton.mousePressed(() => this.editList());
+
+            this.buttons = [
+                this.addTaskButton,
+                this.deleteListButton,
+                this.editListButton
+            ]
+        }
+    
         this.menuButton = createButton(`≡`);
         this.menuButton.hide();
         this.menuButton.mousePressed(() => this.buttonPressedMenu());
 
-        //list buttons
-        this.addTaskButton = createButton(`Add Task`);
-        this.addTaskButton.hide();
-        this.addTaskButton.mousePressed(() => this.buttonPressedAddTask());
-
-        this.deleteListButton = createButton(`Delete List`);
-        this.deleteListButton.hide();
-        this.deleteListButton.mousePressed(() => this.buttonPressedDeleteList());
-
-        this.editListButton = createButton(`Edit List`);
-        this.editListButton.hide();
-        this.editListButton.mousePressed(() => this.editList());
-
         this.mainBox = createDiv();
-
     }
 
     deleteMenu() {
@@ -91,15 +106,15 @@ class Menu {
         saveAllLists();
     }
 
-    deleteListButtons(){
-        this.addTaskButton.remove();
-        this.deleteListButton.remove();
-        this.editListButton.remove();
-        this.menuButton.remove();
+    deleteButtons(){
+        for (button of this.buttons) {
+            button.remove()
+        }
+        this.deleteListTaskButtons();
     }
 
     buttonPressedDeleteList(){
-        this.deleteListButtons();
+        this.deleteButtons();
         this.deleteListTaskButtons();
         this.mainBox.remove();
         localStorage.clear();
@@ -117,16 +132,11 @@ class Menu {
 
     editList(){
         let editName = prompt("Input new list name:", this.parent.name);
-        switch(editName){
-            case null:
-                return;
-            break;
-
-            default:
-                this.parent.name = editName;
-                saveAllLists();
+        if (editName) {
+            this.parent.name = editName;
+            saveAllLists();
         }
-
+        
         hideAllMenus();
     }
 
@@ -146,57 +156,28 @@ class Menu {
     }
 
     closeMenu() {
-        if(this.parent instanceof Task){
-            this.taskMenuOpen = false;
-            this.hideMenuButtons();
+            this.menuOpen = false;
+            this.hideButtons();
+            this.mainBox.hide()
             return;
-        }else if(this.parent instanceof List){
-            this.listMenuOpen = false;
-            this.hideListMenuButtons();
-            return;
-        }
-        
-        
     }
 
     buttonPressedMenu() {
-        if(this.parent instanceof Task){
-           if (!this.taskMenuOpen) {
+           if (!this.menuOpen) {
                 hideAllMenus()
-                this.taskMenuOpen = true;
+                this.menuOpen = true;
                 return;
-            } else if (this.taskMenuOpen) {
+            } else if (this.menuOpen) {
                 this.closeMenu();
             } 
-        }else if(this.parent instanceof List){
-            if (!this.listMenuOpen) {
-                hideAllMenus()
-                this.listMenuOpen = true;
-                return;
-            } else if (this.listMenuOpen) {
-                this.closeMenu();
-            } 
-        }
-        
-
     }
 
-    deleteTaskButtons() {
-        this.moveTaskUpButton.remove();
-        this.moveTaskDownButton.remove();
-        this.markTaskDoneButton.remove();
-        this.deleteTaskButton.remove();
-        this.editTaskButton.remove();
-        this.menuButton.remove();
-    }
-
-    showTaskMenu() {
-
-        if (!this.taskMenuOpen) {
+    showMenu() {
+        if (!this.menuOpen) {
             return;
         }
-        let bgColor = theme.getColor("BackgroundTertiary")
-        let borderColor = theme.getColor("StrokeSecondary")
+        let bgColor = theme.getPaint("BackgroundTertiary")
+        let borderColor = theme.getPaint("StrokeSecondary")
         const pos = { x: this.x, y: this.y };
 
         // main box
@@ -205,149 +186,60 @@ class Menu {
         this.mainBox.style(`height: ${[this.height]}px`);
         this.mainBox.style("z-index: 2");
         if (mode === "default") {
-            this.mainBox.style(`background-color: ${bgColor.toHex()}`);
-            this.mainBox.style(`border: 3px solid ${borderColor.toHex()}`);
+            this.mainBox.style(`background-color: ${bgColor.getHex()}`);
+            this.mainBox.style(`border: 3px solid ${borderColor.getHex()}`);
         } else if (mode === "dark") {
-            this.mainBox.style(`background-color: ${bgColor.toDarkMode().toHex()}`);
-            this.mainBox.style(`border: 3px solid ${borderColor.toHex()}`);
+            this.mainBox.style(`background-color: ${bgColor.toDarkMode().getHex()}`);
+            this.mainBox.style(`border: 3px solid ${borderColor.getHex()}`);
         }
 
         this.mainBox.style(`border-radius: 10px`);
         this.mainBox.show();
 
         // sets pos of buttons        
-        this.markTaskDoneButton.position(pos.x + MENU_X_OFFSET + 7, pos.y + MENU_Y_OFFSET + 7);
-        this.editTaskButton.position(pos.x + MENU_X_OFFSET + 7, pos.y + MENU_Y_OFFSET + 30);
-        this.deleteTaskButton.position(pos.x + MENU_X_OFFSET + 7, pos.y + MENU_Y_OFFSET + 53);
-        this.moveTaskUpButton.position(pos.x + MENU_X_OFFSET + 7, pos.y + MENU_Y_OFFSET + 76);
-        this.moveTaskDownButton.position(pos.x + MENU_X_OFFSET + 41, pos.y + MENU_Y_OFFSET + 76);
-
-        let buttons = [
-            this.markTaskDoneButton,
-            this.editTaskButton,
-            this.deleteTaskButton,
-            this.moveTaskUpButton,
-            this.moveTaskDownButton
+        let positions = [
+            {x: 7, y: 7},
+            {x: 7, y: 30},
+            {x: 7, y: 53},
+            {x: 7, y: 76},
+            {x: 41, y: 76},
         ]
-        
-        let bgClr = theme.getColor("BackgroundSecondary")
-        let textClr = theme.getColor("TextPrimary")
-        let strokeClr = theme.getColor("StrokePrimary")
-        for (let btn of buttons) {
+
+        let bgClr = theme.getPaint("BackgroundSecondary")
+        let textClr = theme.getPaint("TextPrimary")
+        let strokeClr = theme.getPaint("StrokePrimary")
+
+        let loops = 0
+        for (let btn of this.buttons) {
+            btn.position(pos.x + MENU_X_OFFSET + positions[loops].x, pos.y + MENU_Y_OFFSET + positions[loops].y)
             btn.show()
             btn.style('z-index', '3')
             btn.style('position', 'absolute')
-            btn.style("background-color", bgClr.toHex()); 
-            btn.style("color", textClr.toHex()); 
-            btn.style("border", "2px solid" + strokeClr.toHex()); 
+            btn.style("background-color", bgClr.getHex()); 
+            btn.style("color", textClr.getHex()); 
+            btn.style("border", "2px solid" + strokeClr.getHex()); 
+            loops++
         }
     }
 
-    showListMenu() {
-
-        if (!this.listMenuOpen) {
-            return;
-        }
-        let bgColor = theme.getColor("BackgroundTertiary")
-        let borderColor = theme.getColor("StrokeSecondary")
-        const pos = { x: this.parent.x, y: this.y };
-
-        // main box
-        this.mainBox.position(pos.x + LIST_MENU_X_OFFSET, pos.y + LIST_MENU_Y_OFFSET);
-        this.mainBox.style(`width: ${[this.width]}px`);
-        this.mainBox.style(`height: ${[this.height]}px`);
-        this.mainBox.style("z-index: 2");
-        if (mode === "default") {
-            this.mainBox.style(`background-color: ${bgColor.toHex()}`);
-            this.mainBox.style(`border: 3px solid ${borderColor.toHex()}`);
-        } else if (mode === "dark") {
-            this.mainBox.style(`background-color: ${bgColor.toDarkMode().toHex()}`);
-            this.mainBox.style(`border: 3px solid ${borderColor.toHex()}`);
-        }
-
-        this.mainBox.style(`border-radius: 10px`);
-        this.mainBox.show();
-
-        // sets pos of buttons
-        this.addTaskButton.position(pos.x + LIST_MENU_X_OFFSET + 7, pos.y + LIST_MENU_Y_OFFSET + 7);
-        this.deleteListButton.position(pos.x + LIST_MENU_X_OFFSET + 7, pos.y + LIST_MENU_Y_OFFSET + 30);
-        this.editListButton.position(pos.x + LIST_MENU_X_OFFSET + 7, pos.y + LIST_MENU_Y_OFFSET + 53);
-
-        //show move task up/down buttons
-        this.addTaskButton.show();
-        this.deleteListButton.show();
-        this.editListButton.show();
-
-        //menu buttons style.
-        this.addTaskButton.style('z-index', '3');
-        this.deleteListButton.style('z-index', '3');
-        this.editListButton.style('z-index', '3');
-
-        //menu buttons position style.
-        this.addTaskButton.style('position', 'absolute');
-        this.deleteListButton.style('position', 'absolute');
-        this.editListButton.style('position', 'absolute');
-        let buttons = [
-            this.markTaskDoneButton,
-            this.editTaskButton,
-            this.deleteTaskButton,
-            this.moveTaskUpButton,
-            this.moveTaskDownButton
-        ]
-        
-        let bgClr = theme.getColor("BackgroundSecondary")
-        let textClr = theme.getColor("TextPrimary")
-        let strokeClr = theme.getColor("StrokePrimary")
-        for (let btn of buttons) {
-            btn.show()
-            btn.style('z-index', '3')
-            btn.style('position', 'absolute')
-            btn.style("background-color", bgClr.toHex()); 
-            btn.style("color", textClr.toHex()); 
-            btn.style("border", "2px solid" + strokeClr.toHex()); 
+    hideButtons() {
+        for (let btn of this.buttons) {
+            btn.hide()
         }
     }
-
-    hideMenuButtons() {
-        this.markTaskDoneButton.hide();
-        this.deleteTaskButton.hide();
-        this.editTaskButton.hide();
-        this.moveTaskUpButton.hide();
-        this.moveTaskDownButton.hide();
-        this.mainBox.hide();
-    }
-
-    hideListMenuButtons(){
-        this.addTaskButton.hide();
-        this.deleteListButton.hide();
-        this.editListButton.hide();
-        this.mainBox.hide();
-    }
-
     
-
     editTask(){
         let editName = prompt("Input new task name:", this.parent.name);
-        switch(editName){
-            case null:
-                return;
-                break;
-
-            default:
-                this.parent.name = editName;
-                saveAllLists();
+        if (!editName) {
+            return
         }
+        this.parent.name = editName;
 
         let editDesc = prompt("Input new task description:", this.parent.description);
-        switch(editDesc){
-            case null:
-                saveAllLists();
-                return;
-                break;
 
-            default:
-                this.parent.description = editDesc;
-                saveAllLists();
+        if (!editDesc) {
+            saveAllLists();
+            return;
         }
 
         this.parent.description = editDesc;
@@ -380,9 +272,10 @@ class Menu {
     getListTask() {
         for (let list of listArray) {
             let storage = list.getStorage();
-            if (storage.findIndex(task => task.id === this.parent.id) != -1) {
-                return list;
+            if (storage.findIndex(task => task.id === this.parent.id) == -1) {
+                continue
             }
+            return list;
         }
     }
 

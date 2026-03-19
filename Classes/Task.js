@@ -54,8 +54,8 @@ class Task {
         this.id          = id       || Math.floor(Date.now() / ((Math.random() * 10000) + 500));
         // this.id          = id       || GenerateId();  
 
-        //let menuBg = this.bgColor.getColor()
-        //let menuStroke = STROKE_COLOR.getColor()
+        //let menuBg = this.bgColor.getRGB()
+        //let menuStroke = STROKE_COLOR.getRGB()
 
         this.menu = new Menu(
             0,
@@ -126,15 +126,18 @@ class Task {
   
     show(x, y) {
         let ctx = drawingContext
-        ctx.shadowColor = theme.getColor("Glow").toHex();
-        ctx.shadowOffsetX = 0.7;
-        ctx.shadowOffsetY = 0.7;
-        ctx.shadowBlur = 1;
 
-        let strokeColor = theme.getColor("StrokeSecondary")
-        let nameColor = theme.getColor("TextSecondary")
-        let descColor = theme.getColor("TextTertiary")
-        let bgColor = theme.getColor("BackgroundTertiary")
+        if (theme.getData("GlowEnabled")) {
+            ctx.shadowColor = theme.getPaint("Glow").getHex();
+            ctx.shadowOffsetX = 0.7;
+            ctx.shadowOffsetY = 0.7;
+            ctx.shadowBlur = 1 * theme.getData("GlowIntensity");
+        }
+
+        let strokeColor = theme.getPaint("StrokeSecondary")
+        let nameColor = theme.getPaint("TextSecondary")
+        let descColor = theme.getPaint("TextTertiary")
+        let bgColor = theme.getPaint("BackgroundTertiary")
 
         let menu = this.menu
 
@@ -146,12 +149,12 @@ class Task {
 
         // main box
         strokeWeight(3);
-        stroke(strokeColor.getColor());
+        stroke(strokeColor.getRGB());
         push();
         if (mode === "default") {
-            fill(bgColor.getColor());
+            fill(bgColor.getRGB());
         } else if (mode === "dark") {
-            fill(bgColor.toDarkMode().getColor());
+            fill(bgColor.toDarkMode().getRGB());
         }
         rect(x, y, 380, 120, 10); // why aren't these constants?!
         pop();
@@ -164,53 +167,56 @@ class Task {
         menu.menuButton.position(x + 345, y + 7);
 
         //styles the menu button
-        let buttonBg = theme.getColor("BackgroundSecondary")
-        let buttonText = theme.getColor("TextPrimary")
-        let buttonStroke = theme.getColor("StrokePrimary")
+        let buttonBg = theme.getPaint("BackgroundSecondary")
+        let buttonText = theme.getPaint("TextPrimary")
+        let buttonStroke = theme.getPaint("StrokePrimary")
 
-        menu.menuButton.style("background-color", buttonBg.toHex()); 
-        menu.menuButton.style("color", buttonText.toHex()); 
-        menu.menuButton.style("border", "2px solid" + buttonStroke.toHex()); 
+        menu.menuButton.style("background-color", buttonBg.getHex()); 
+        menu.menuButton.style("color", buttonText.getHex()); 
+        menu.menuButton.style("border", "2px solid" + buttonStroke.getHex()); 
 
         //show move task up/down buttons
         menu.menuButton.show();
 
         // text highlight
-        let highlightOpacity = 22; // scale of 0-100
-        textSize(NAME_SIZE);
-        let highlightMargin = 5;
-        let highlightWidth = 380 - highlightMargin * 2;
-        let highlightHeight = 120 * 0.38 - highlightMargin;
-        //let highlightWidth = textWidth(this.name) + highlightMargin;
-        //let highlightHeight = textAscent(this.name) * 0.2 + highlightMargin;
-        noStroke()
-        fill(255,255,255,highlightOpacity);
-        rect(x + highlightMargin, y + highlightMargin, highlightWidth, highlightHeight, 10)
-
+        if (theme.getData("HighlightEnabled")) {
+            console.log(theme.getData("HighlightEnabled"))
+            let highlightColor = theme.getPaint("HighlightColor")
+            let highlightOpacity = theme.getData("HighlightOpacity"); // scale of 0-100
+            textSize(NAME_SIZE);
+            let highlightMargin = 5;
+            let highlightWidth = 380 - highlightMargin * 2;
+            let highlightHeight = 120 * 0.38 - highlightMargin;
+            //let highlightWidth = textWidth(this.name) + highlightMargin;
+            //let highlightHeight = textAscent(this.name) * 0.2 + highlightMargin;
+            noStroke()
+            fill(highlightColor.R, highlightColor.G, highlightColor.B, highlightOpacity);
+            rect(x + highlightMargin, y + highlightMargin, highlightWidth, highlightHeight, 10)
+        }
         
         strokeWeight(0); //i really do not like using stroke on text, it looks SOOO ugly
         // text slop
-        textFont(theme.getFont());
+        textFont(theme.getData("Font"));
         //name
         textAlign(CENTER, CENTER);
-        fill(nameColor.getColor());
+        fill(nameColor.getRGB());
         textSize(NAME_SIZE);
         text(this.name, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING);
 
         //desc
-        fill(descColor.getColor());
+        fill(descColor.getRGB());
         textSize(DESC_SIZE);
         text(this.description, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING * 2);
 
         //status
-        fill(STATUS_COLORS[this.status].getColor() || STATUS_COLORS["Default"].getColor());
+        fill(STATUS_COLORS[this.status].getRGB() || STATUS_COLORS["Default"].getRGB());
         textSize(STATUS_SIZE);
         text(this.status, x + TEXT_X_OFFSET, y + TEXT_Y_PADDING * 3);
 
-        //fill(DEFAULT_WHITE.getColor());
+        //fill(DEFAULT_WHITE.getRGB());
         //strokeWeight(1);
 
-        this.menu.showTaskMenu();
+        this.menu.showMenu();
     }
 
     static fromJSON(data) {

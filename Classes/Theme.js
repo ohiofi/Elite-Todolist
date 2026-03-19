@@ -1,27 +1,37 @@
 class Theme {
-    constructor(tP, tS, tT, sP, sS, bP, bS, bT, g, font) { //ik how much i stress readability but i am NOT typing allat
+    constructor(data) {
+        if (!data) {
+            data = {}
+        }
         //text slop
-        this.TextPrimary         = tP   || new Paint()
-        this.TextSecondary       = tS   || new Paint()
-        this.TextTertiary        = tT   || new Paint(200,200,200)
+        this.TextPrimary         = data.TextPrimary          || new Paint()
+        this.TextSecondary       = data.TextSecondary        || new Paint()
+        this.TextTertiary        = data.TextTertiary         || new Paint(200,200,200)
 
         //stroke
-        this.StrokePrimary       = sP   || new Paint(100, 230, 255)
-        this.StrokeSecondary     = sS   || new Paint(100, 230, 255)
+        this.StrokePrimary       = data.StrokePrimary        || new Paint(100, 230, 255)
+        this.StrokeSecondary     = data.StrokeSecondary      || new Paint(100, 230, 255)
 
         //background
-        this.BackgroundPrimary   = bP   || new Paint(200,200,200)
-        this.BackgroundSecondary = bS   || new Paint(255,255,255)
-        this.BackgroundTertiary  = bT   || new Paint(58, 110, 165)
+        this.BackgroundPrimary   = data.BackgroundPrimary    || new Paint(200,200,200)
+        this.BackgroundSecondary = data.BackgroundSecondary  || new Paint(255,255,255)
+        this.BackgroundTertiary  = data.BackgroundTertiary   || new Paint(58, 110, 165)
 
         //glow/shadow
-        this.Glow = g                   || new Paint(0,0,0)
+        this.Glow                = data.Glow                 || new Paint(0,0,0)
+        this.GlowIntensity       = data.GlowIntensity        || 1
+        this.GlowEnabled         = data.GlowEnabled          || false
 
-        //font
-        this.Font                = font || "Arial"
+        //highlight
+        this.HighlightColor      = data.HighlightColor       || new Paint(255,255,255)
+        this.HighlightEnabled    = data.HighlightEnabled     || false
+        this.HighlightOpacity    = data.HighlightOpacity     || 22
+
+        //misc data
+        this.Font                = data.Font                 || "Arial"
     }
 
-    getColor(colorName) {
+    getPaint(colorName) {
         let colorVal = this[colorName] //either a Paint or a list of paints
 
         if (colorVal instanceof Paint) {
@@ -30,13 +40,12 @@ class Theme {
 
         //pick random if its a list
         let randInt = Math.floor(Math.random() * colorVal.length)
-        console.log(randInt)
 
         return colorVal[randInt]
     }
 
-    getFont() {
-        return this.Font
+    getData(dataName) {
+        return this[dataName]
     }
 
     //might be redundant later due to custom dark themes
@@ -72,28 +81,26 @@ class Theme {
 }
 
 const PresetThemes = {
-    Default: new Theme(
-        new Paint(),             //TextPrimary
-        new Paint(),             //TextSecondary
-        new Paint(200,200,200),  //TextTertiary
-        new Paint(100, 230, 255),//StrokePrimary
-        new Paint(100, 230, 255),//StrokeSecondary
-        new Paint(200,200,200),  //BackgroundPrimary
-        new Paint(255,255,255),  //BackgroundSecondary
-        new Paint(58, 110, 165), //BackgroundTertiary
-        new Paint(0, 0, 0),       //Glow
-        "Arial"                  //Font
-    ),
-    Classic: new Theme(
-        new Paint(),             //TextPrimary
-        new Paint(),             //TextSecondary
-        new Paint(200,200,200),  //TextTertiary
-        new Paint(100, 230, 255),//StrokePrimary
-        new Paint(100, 230, 255),//StrokeSecondary
-        new Paint(200,200,200),  //BackgroundPrimary
-        new Paint(255,255,255),  //BackgroundSecondary
-        //BackgroundTertiary
-        [
+    Default: new Theme({
+        GlowEnabled: true,
+        HighlightEnabled: true
+    }),
+    DarkMode: new Theme({
+        TextPrimary: new Paint(200,200,200),
+        TextSecondary: new Paint(200,200,200),
+        TextTertiary: new Paint(225,225,225),
+        BackgroundPrimary: new Paint(25,25,25),
+        BackgroundSecondary: new Paint(50,50,50),
+        BackgroundTertiary: new Paint(8, 60, 105),
+        StrokePrimary: new Paint(25, 155, 180),
+        StrokeSecondary: new Paint(25, 155, 180),
+        GlowEnabled: true,
+        HighlightColor: new Paint(),
+        HighlightOpacity: 44,
+        HighlightEnabled: true
+    }),
+    Classic: new Theme({
+        BackgroundTertiary: [
             new Paint(58, 110, 165), 
             // new Paint(192), 
             // new Paint(161, 130, 118), 
@@ -105,82 +112,130 @@ const PresetThemes = {
             // new Paint(58, 90, 64), 
             // new Paint(52, 78, 65)
         ],
-        new Paint(0, 0, 0),      //Glow
-        "Courier New"            //Font
-    ),
-    Sakura: new Theme(
-        new Paint(255, 229, 236),//TextPrimary
-        new Paint(251, 111, 146),//TextSecondary
-        new Paint(82, 50, 20),   //TextTertiary
-        new Paint(71, 49, 27),   //StrokePrimary
-        new Paint(255, 179, 198),//StrokeSecondary
-        new Paint(255, 194, 209),//BackgroundPrimary
-        new Paint(82, 53, 25),   //BackgroundSecondary
-        new Paint(255, 229, 236),//BackgroundTertiary
-        new Paint(0, 0, 0),       //Glow
-        "Arial"                  //Font
-    ),
+        Font: "Courier New",
+        GlowEnabled: false,
+        HighlightEnabled: false
+    }),
+    Sakura: new Theme({
+        TextPrimary: new Paint(255, 229, 236),
+        TextSecondary: new Paint(251, 111, 146),
+        TextTertiary: new Paint(82, 50, 20),   
+        StrokePrimary: new Paint(71, 49, 27),   
+        StrokeSecondary: new Paint(255, 179, 198),
+        BackgroundPrimary: new Paint(255, 194, 209),
+        BackgroundSecondary: new Paint(82, 53, 25),   
+        BackgroundTertiary: new Paint(255, 229, 236),
+        GlowEnabled: true,
+        HighlightEnabled: true
+    }),
     //TODO: MY DELICATE RETINAS!!!! THEY BURN!!!!!
-    SakuraPrime: new Theme( 
-        new Paint(),             //TextPrimary
-        new Paint(),             //TextSecondary
-        new Paint(255, 117, 239),//TextTertiary
-        new Paint(255, 161, 244),//StrokePrimary
-        new Paint(255, 161, 244),//StrokeSecondary
-        new Paint(255, 255, 255),//BackgroundPrimary
-        new Paint(255, 117, 239),//BackgroundSecondary
-        new Paint(255, 255, 255),//BackgroundTertiary
-        new Paint(255, 0, 255),  //Glow
-        "Arial"                  //Font
-    ),
-    V1sDream: new Theme(
-        new Paint(10, 30, 52), //TextPrimary
-        new Paint(189, 31, 54),//TextSecondary
-        new Paint(178, 30, 53),//TextTertiary
-        new Paint(133, 24, 42),//StrokeSecondary
-        new Paint(100, 18, 32),//StrokePrimary
-        new Paint(110, 20, 35),//BackgroundPrimary
-        new Paint(199, 31, 55),//BackgroundSecondary
-        new Paint(100, 18, 32),//BackgroundTertiary
-        new Paint(255, 0, 0),  //Glow
-        "Arial",               //Font
-    ),
-    DeepBlue: new Theme(
-        new Paint(70, 143, 175),//TextPrimary
-        new Paint(),            //TextSecondary
-        new Paint(100,100,100), //TextTertiary
-        new Paint(),            //StrokePrimary
-        new Paint(97, 165, 194),//StrokeSecondary
-        new Paint(1, 58, 99),   //BackgroundPrimary
-        new Paint(1, 42, 74),   //BackgroundSecondary
-        new Paint(1, 73, 124),  //BackgroundTertiary
-        new Paint(0, 0, 0),     //Glow
-        "Arial",                //Font
-    ),
-    "1x1x1x1": new Theme(
-        new Paint(255,0,0),      //TextPrimary
-        new Paint(255, 0, 0),    //TextSecondary
-        new Paint(175, 175, 175),//TextTertiary
-        new Paint(0, 140, 0),    //StrokePrimary
-        new Paint(10, 175, 10),  //StrokeSecondary
-        new Paint(),             //BackgroundPrimary
-        new Paint(11, 101, 11),  //BackgroundSecondary
-        new Paint(0, 0, 0),      //BackgroundTertiary
-        new Paint(0, 255, 0),    //Glow
-        "Arial"                  //Font
-    ),
-    UltraGreen: new Theme(
-        new Paint(0, 114, 0),   //TextPrimary
-        new Paint(0, 100, 0),   //TextSecondary
-        new Paint(0, 75, 35),   //TextTertiary
-        new Paint(56, 176, 0),  //StrokePrimary
-        new Paint(0, 128, 0),   //StrokeSecondary
-        new Paint(204, 255, 51),//BackgroundPrimary
-        new Paint(158, 240, 26),//BackgroundSecondary
-        new Paint(112, 224, 0), //BackgroundTertiary
-        new Paint(0, 255, 0),     //Glow
-        "Arial",                //Font
-    ),
+    SakuraPrime: new Theme({ 
+        TextPrimary: new Paint(),             
+        TextSecondary: new Paint(),             
+        TextTertiary: new Paint(255, 117, 239),
+        StrokePrimary: new Paint(255, 161, 244),
+        StrokeSecondary: new Paint(255, 161, 244),
+        BackgroundPrimary: new Paint(255, 255, 255),
+        BackgroundSecondary: new Paint(255, 117, 239),
+        BackgroundTertiary: new Paint(255, 255, 255),
+        Glow: new Paint(255, 0, 255),  
+        GlowIntensity: 10,
+        GlowEnabled: true,
+        HighlightEnabled: true
+    }),
+    V1sDream: new Theme({
+        TextPrimary: new Paint(10, 30, 52), 
+        TextSecondary: new Paint(189, 31, 54),
+        TextTertiary: new Paint(178, 30, 53),
+        StrokeSecondary: new Paint(133, 24, 42),
+        StrokePrimary: new Paint(100, 18, 32),
+        BackgroundPrimary: new Paint(110, 20, 35),
+        BackgroundSecondary: new Paint(199, 31, 55),
+        BackgroundTertiary: new Paint(100, 18, 32),
+        Glow: new Paint(255, 0, 0),  
+        HighlightColor: new Paint(255,0,0),
+        GlowIntensity: 5,
+        GlowEnabled: true,
+        HighlightOpacity: 60,
+        HighlightEnabled: true
+    }),
+    DeepBlue: new Theme({
+        TextPrimary: new Paint(70, 143, 175),
+        TextSecondary: new Paint(),            
+        TextTertiary: new Paint(100,100,100), 
+        StrokePrimary: new Paint(),            
+        StrokeSecondary: new Paint(97, 165, 194),
+        BackgroundPrimary: new Paint(1, 58, 99),   
+        BackgroundSecondary: new Paint(1, 42, 74),   
+        BackgroundTertiary: new Paint(1, 73, 124),  
+        GlowEnabled: true,
+        HighlightEnabled: true
+    }),
+    "1x1x1x1": new Theme({
+        TextPrimary: new Paint(255,0,0),      
+        TextSecondary: new Paint(255, 0, 0),    
+        TextTertiary: new Paint(175, 175, 175),
+        StrokePrimary: new Paint(0, 140, 0),    
+        StrokeSecondary: new Paint(10, 175, 10),  
+        BackgroundPrimary: new Paint(),             
+        BackgroundSecondary: new Paint(11, 101, 11),  
+        BackgroundTertiary: new Paint(0, 0, 0),      
+        Glow: new Paint(0, 255, 0),    
+        GlowIntensity: 10,
+        GlowEnabled: true,
+        HighlightEnabled: false
+    }),
+    UltraGreen: new Theme({
+        TextPrimary: new Paint(0, 114, 0),   
+        TextSecondary: new Paint(0, 100, 0),   
+        TextTertiary: new Paint(0, 75, 35),   
+        StrokePrimary: new Paint(56, 176, 0),  
+        StrokeSecondary: new Paint(0, 128, 0),   
+        BackgroundPrimary: new Paint(204, 255, 51),
+        BackgroundSecondary: new Paint(158, 240, 26),
+        BackgroundTertiary: new Paint(112, 224, 0), 
+        Glow: new Paint(0, 255, 0),   
+        GlowEnabled: true,
+        HighlightEnabled: true
+    }),
+    SmileOS: new Theme({
+        TextPrimary: new Paint(255,255,255),
+        TextSecondary: new Paint(255,255,255),
+        TextTertiary: new Paint(255,255,255),
+        StrokePrimary: new Paint(255,255,255),
+        StrokeSecondary: new Paint(255,255,255),
+        BackgroundPrimary: new Paint(0,0,0),
+        BackgroundSecondary: new Paint(0,0,0),
+        BackgroundTertiary: new Paint(0,0,0),
+        GlowEnabled: false,
+        HighlightEnabled: false
+    }),
+    HackerMan: new Theme({
+        TextPrimary: new Paint(0,255,0),
+        TextSecondary: new Paint(0,255,0),
+        TextTertiary: new Paint(0,255,0),
+        StrokePrimary: new Paint(0,255,0),
+        StrokeSecondary: new Paint(0,255,0),
+        BackgroundPrimary: new Paint(0,0,0),
+        BackgroundSecondary: new Paint(0,0,0),
+        BackgroundTertiary: new Paint(0,0,0),
+        Glow: new Paint(0,255,0),
+        GlowIntensity: 10,
+        GlowEnabled: true,
+        HighlightEnabled: false
+    }),
+    Noob: new Theme({
+        TextPrimary: new Paint(0,0,0),
+        TextSecondary: new Paint(0,0,0),
+        TextTertiary: new Paint(0,0,0),
+        StrokePrimary: new Paint(0,0,0),
+        StrokeSecondary: new Paint(0,0,0),
+        BackgroundPrimary: new Paint(255, 225, 0),
+        BackgroundSecondary: new Paint(0, 157, 255),
+        BackgroundTertiary: new Paint(13, 133, 0),
+        GlowEnabled: true,
+        HighlightEnabled: true
+    })
 }
 
 function getPresetTheme(presetName) {

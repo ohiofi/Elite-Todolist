@@ -31,10 +31,15 @@ function setup() {
   }
 }
 
+//as of now the draw function will stay but some other day it wont exist (idk if Element.mouseOver works with this anyway)
 function draw() {
-  let bgColor = theme.getColor("BackgroundPrimary")
+  update()
+}
+
+function update() {
+  let bgColor = theme.getPaint("BackgroundPrimary")
   if (mode === "default") {
-    background(bgColor.getColor());
+    background(bgColor.getRGB());
   } else if (mode === "dark") {
     let evilBg = bgColor.toDarkMode()
     background(evilBg);
@@ -68,7 +73,6 @@ function showLists() {
   }
 }
 
-
 // If the window size changes, automatically resize the canvas to fill the browser window
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
@@ -101,13 +105,13 @@ function getNewList(){
 }
 
 function styleButton(btn) {
-  let bgClr = theme.getColor("BackgroundTertiary")
-  let textClr = theme.getColor("TextSecondary")
-  let strokeClr = theme.getColor("StrokeSecondary")
+  let bgClr = theme.getPaint("BackgroundTertiary")
+  let textClr = theme.getPaint("TextSecondary")
+  let strokeClr = theme.getPaint("StrokeSecondary")
 
-  btn.style("background-color", bgClr.toHex()); 
-  btn.style("color", textClr.toHex()); 
-  btn.style("border", "2px solid" + strokeClr.toHex()); 
+  btn.style("background-color", bgClr.getHex()); 
+  btn.style("color", textClr.getHex()); 
+  btn.style("border", "2px solid" + strokeClr.getHex()); 
   btn.style("padding", "8px 16px");
   btn.style("border-radius", "6px");
   btn.style("font-size", "14px");

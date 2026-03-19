@@ -9,25 +9,27 @@ class ArchiveList extends List {
 
     show(x) {
         let ctx = drawingContext
-        ctx.shadowColor = theme.getColor("Glow").toHex();
-        ctx.shadowOffsetX = 0.7;
-        ctx.shadowOffsetY = 0.7;
-        ctx.shadowBlur = 1;
+        if (theme.getData("GlowEnabled")) {
+            ctx.shadowColor = theme.getPaint("Glow").getHex();
+            ctx.shadowOffsetX = 0.7;
+            ctx.shadowOffsetY = 0.7;
+            ctx.shadowBlur = 1 * theme.getData("GlowIntensity");
+        }
 
         strokeWeight(5)
 
-        let borderColor = theme.getColor("StrokePrimary")
-        let backgroundColor = theme.getColor("BackgroundSecondary")
-        let titleColor = theme.getColor("TextPrimary")
+        let borderColor = theme.getPaint("StrokePrimary")
+        let backgroundColor = theme.getPaint("BackgroundSecondary")
+        let titleColor = theme.getPaint("TextPrimary")
 
         if (mode === "default") {
-            stroke(borderColor.getColor());
-            fill(backgroundColor.getColor());
+            stroke(borderColor.getRGB());
+            fill(backgroundColor.getRGB());
         } else if (mode === "dark") {
             let evilmodeColor = backgroundColor.toDarkMode()
             let evilBorderColor = borderColor.toDarkMode()
-            stroke(evilBorderColor.getColor());
-            fill(evilmodeColor.getColor());
+            stroke(evilBorderColor.getRGB());
+            fill(evilmodeColor.getRGB());
         }
         // box
         let verticalOffsetTop = 100;
@@ -49,18 +51,18 @@ class ArchiveList extends List {
 
         // title
         
-        textFont(theme.getFont());
+        textFont(theme.getData("Font"));
         textAlign(CENTER, CENTER);
       
        
         
         if (mode === "default") {
             strokeWeight(0);
-            fill(titleColor.getColor());
+            fill(titleColor.getRGB());
         } else if (mode === "dark") {
             let evilTitleColor = titleColor.toDarkMode()
             strokeWeight(3);
-            fill(evilTitleColor.getColor());
+            fill(evilTitleColor.getRGB());
         }
         textSize(24);
       
